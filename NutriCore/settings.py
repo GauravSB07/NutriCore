@@ -64,7 +64,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'GYM_APP.urls'
+ROOT_URLCONF = 'NutriCore.urls'
 
 TEMPLATES = [
     {
@@ -81,7 +81,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'GYM_APP.wsgi.application'
+WSGI_APPLICATION = 'NutriCore.wsgi.application'
 
 
 # Database
