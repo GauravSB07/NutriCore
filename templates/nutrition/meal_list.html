@@ -1,0 +1,272 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+.card {
+    background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(240,235,255,0.95));
+    backdrop-filter: blur(20px);
+    border-radius: 22px;
+    padding: 16px;
+    box-shadow: 0 10px 25px rgba(139,92,246,0.15);
+}
+
+.meal-card {
+    display: flex;
+    gap: 12px;
+    padding: 12px;
+    border-radius: 18px;
+    background: rgba(255,255,255,0.8);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 6px 18px rgba(139,92,246,0.12);
+}
+
+.meal-img {
+    width: 55px;
+    height: 55px;
+    border-radius: 14px;
+    object-fit: cover;
+}
+
+.progress {
+    height: 6px;
+    background: #eee;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.fill {
+    height: 100%;
+    background: linear-gradient(to right, #7c3aed, #a78bfa);
+}
+
+/* ===== HEADER ===== */
+.page-header {
+    margin-top: 6px;
+}
+
+/* layout */
+.header-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* TEXT */
+.header-text h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.header-text p {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* 🔥 IMAGE BOX (FIXED) */
+.header-img-box {
+    width: 70px;
+    height: 70px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: rgba(255,255,255,0.6);
+    border-radius: 16px;
+
+    box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+}
+
+/* image inside */
+.header-img-box img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+/* divider */
+.header-divider {
+    margin-top: 14px;
+    height: 2px;
+    width: 100%;
+    border-radius: 10px;
+
+    background: linear-gradient(
+        to right,
+        rgba(124,58,237,0.6),
+        rgba(167,139,250,0.2)
+    );
+}
+
+.fab-container {
+    position: absolute;
+    right: 18px;
+
+    /* 🔥 KEY FIX */
+    bottom: 115px;   /* pushes it clearly above navbar */
+
+    z-index: 50;
+}
+
+.fab-container a {
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 26px;
+    color: white;
+
+    border-radius: 50%;
+
+    background: linear-gradient(135deg,#7c3aed,#a78bfa);
+
+    box-shadow:
+        0 12px 25px rgba(124,58,237,0.4),
+        0 4px 10px rgba(0,0,0,0.1);
+
+    transition: 0.25s ease;
+}
+
+/* hover */
+.fab-container a:hover {
+    transform: scale(1.08);
+}
+
+</style>
+
+<div class="px-4 pt-4 pb-20 space-y-6">
+
+
+    <div class="page-header">
+
+        <div class="header-main">
+
+            <!-- TEXT -->
+            <div class="header-text">
+                <h1>Meals 🍽️</h1>
+                <p>Track your daily nutrition</p>
+            </div>
+
+            <!-- IMAGE -->
+            <div class="header-img-box">
+                <img src="{% static 'images/meal.png' %}" alt="Meals">
+            </div>
+
+        </div>
+
+        <div class="header-divider"></div>
+
+    </div>
+
+    <!-- 🔥 CALORIES -->
+    <div class="card flex justify-between items-center">
+        <div>
+            <h2 class="text-3xl font-bold">{{ total_calories|floatformat:0 }}</h2>
+            <p class="text-sm text-gray-500">Calories today</p>
+        </div>
+
+        <div class="relative w-16 h-16">
+
+            <svg class="w-16 h-16 -rotate-90">
+                <!-- Background -->
+                <circle
+                    cx="32" cy="32" r="26"
+                    stroke="#e9d5ff"
+                    stroke-width="5"
+                    fill="none"
+                />
+
+                <!-- Progress -->
+                <circle
+                    cx="32" cy="32" r="26"
+                    stroke="#a78bfa"
+                    stroke-width="5"
+                    fill="none"
+                    stroke-linecap="round"
+                    stroke-dasharray="163"
+                    stroke-dashoffset="{{ calories_offset }}"
+                />
+            </svg>
+
+            <!-- Center Icon -->
+            <div class="absolute inset-0 flex items-center justify-center text-lg">
+                🔥
+            </div>
+
+        </div>
+    </div>
+
+    <!-- 💪 PROTEIN -->
+    <div class="card">
+        <h3 class="font-semibold">{{ total_protein|floatformat:0 }}g Protein</h3>
+
+        <div class="progress mt-2">
+            <div class="fill" style="width: {{ total_protein|floatformat:0 }}%;"></div>
+        </div>
+    </div>
+
+    <!-- ================= TODAY ================= -->
+    <div>
+        <h3 class="text-sm font-semibold text-gray-600 mb-2">📋Today</h3>
+
+        {% if meals %}
+            <div class="space-y-3">
+                {% for meal in meals %}
+                    <div class="meal-card">
+
+                        <img src="{% if meal.food.image %}{{ meal.food.image.url }}{% else %}/static/images/login.jpg{% endif %}" class="meal-img">
+
+                        <div class="flex-1">
+                            <div class="flex justify-between">
+                                <h4 class="font-semibold text-sm">{{ meal.food.name }}</h4>
+
+                                {% if meal.is_cheat %}
+                                    <span class="text-red-500 text-xs">🔥 Cheat</span>
+                                {% endif %}
+                            </div>
+
+                            <p class="text-xs text-gray-500">
+                                {{ meal.calories|floatformat:0 }} kcal
+                            </p>
+
+                            <div class="flex gap-4 text-xs text-gray-600 mt-1">
+                                <span>🍽 {{ meal.quantity }}</span>
+                                <span>💪 {{ meal.protein|floatformat:0 }}g</span>
+                            </div>
+                        </div>
+
+                        <div class="text-xs text-purple-500 flex flex-col">
+                            <a href="{% url 'nutrition:edit_meal' meal.id %}">Edit</a>
+                            <a href="{% url 'nutrition:delete_meal' meal.id %}">Del</a>
+                        </div>
+
+                    </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="text-gray-400 text-sm">No meals logged today</p>
+        {% endif %}
+    </div>
+
+
+        <div class="fab-container">
+            <a href="{% url 'nutrition:log_meal' %}"
+               class="w-14 h-14 flex items-center justify-center
+                      bg-gradient-to-r from-purple-500 to-purple-600
+                      text-white text-2xl rounded-full shadow-lg
+                      transition transform hover:scale-110 active:scale-95">
+                +
+            </a>
+        </div>
+
+</div>
+
+{% endblock %}

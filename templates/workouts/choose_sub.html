@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg,#e9d5ff,#c084fc);
+}
+
+.container {
+    max-width: 420px;
+    margin: auto;
+    background: #f9fafb;
+    border-radius: 30px;
+    padding: 18px;
+    min-height: 100vh;
+}
+
+/* TITLE */
+.subtitle {
+    font-size: 12px;
+    color: #6b7280;
+    font-weight: 600;
+}
+
+.title {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 4px;
+}
+
+/* CARD */
+.workout-card {
+    margin-top: 16px;
+    height: 120px;
+    border-radius: 22px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    color: white;
+    border: none;
+    width: 100%;
+}
+
+/* IMAGE (MORE VISIBLE) */
+.card-img {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 60%; /* 🔥 important */
+    object-fit: cover;
+    filter: contrast(1.1) saturate(1.1);
+}
+
+/* SMOOTH GRADIENT (NO LINE) */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(124,58,237,0.85) 0%,
+        rgba(124,58,237,0.65) 35%,
+        rgba(167,139,250,0.35) 65%,
+        rgba(255,255,255,0) 100%
+    );
+}
+
+/* TEXT */
+.card-content {
+    position: relative;
+    z-index: 2;
+}
+
+.time {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.name {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 6px;
+}
+</style>
+
+<div class="container">
+
+    <!-- HEADER TEXT -->
+    <div class="hero-text">
+        <p class="subtitle">CHOOSE WORKOUT</p>
+    </div>
+
+    <!-- TITLE -->
+    <div class="title">{{ muscle.name }}</div>
+
+    <!-- CARDS -->
+    {% for s in sub_muscles %}
+    <form method="post" action="{% url 'choose_exercise' s.id %}">
+        {% csrf_token %}
+
+        <button type="submit" class="workout-card">
+
+            <!-- IMAGE -->
+            <img src="{% if s.image %}{{ s.image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}" class="card-img">
+
+            <!-- GRADIENT -->
+            <div class="overlay"></div>
+
+            <!-- TEXT -->
+            <div class="card-content">
+                <div class="name">{{ s.name|upper }}</div>
+            </div>
+
+        </button>
+
+    </form>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

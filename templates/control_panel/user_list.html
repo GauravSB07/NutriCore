@@ -1,0 +1,293 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+
+/* 🔥 REMOVE NAVBAR */
+nav,
+.navbar,
+.bottom-nav,
+.top-nav,
+header {
+    display: none !important;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: linear-gradient(135deg,#e9d5ff,#c084fc);
+    font-family: 'Poppins', sans-serif;
+}
+
+/* WRAPPER */
+.wrapper {
+    max-width: 420px;
+    margin: auto;
+    padding: 16px;
+}
+
+/* HEADER */
+.header {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+/* SUB HEADER */
+.sub-header {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 12px;
+}
+
+/* TOP BAR */
+.top-bar {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 12px;
+    margin-top: 20px;
+}
+
+/* SEARCH */
+.search {
+    flex: 1;
+    padding: 10px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(124,58,237,0.2);
+    outline: none;
+}
+
+/* ADD BUTTON */
+.add-btn {
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: linear-gradient(to right,#7c3aed,#a78bfa);
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* CARD */
+.card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(18px);
+    border-radius: 22px;
+    padding: 14px;
+
+    border: 1px solid rgba(124,58,237,0.15);
+    box-shadow: 0 10px 25px rgba(124,58,237,0.12);
+}
+
+/* USER ITEM */
+.user-item {
+    padding: 12px;
+    border-radius: 14px;
+    margin-bottom: 10px;
+
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(124,58,237,0.1);
+
+    transition: 0.2s;
+}
+
+.user-item:hover {
+    background: #ede9fe;
+    transform: translateY(-2px);
+}
+
+/* TOP ROW */
+.user-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* NAME */
+.username {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* EMAIL */
+.email {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 2px;
+}
+
+/* STATUS */
+.badge {
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
+.admin {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+.normal {
+    background: #f3f4f6;
+    color: #6b7280;
+}
+
+/* ACTIONS */
+.actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+.actions a {
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.edit {
+    color: #7c3aed;
+}
+
+.delete {
+    color: #dc2626;
+}
+
+</style>
+
+
+<div class="wrapper">
+
+    <!-- HEADER -->
+    <div class="header">Users 👤</div>
+    <div class="sub-header">
+        Total Users: <span id="userCount">{{ users|length }}</span>
+        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+        <a href="{% url 'add_user' %}" class="add-btn">+ Add</a>
+    </div>
+
+    <!-- SEARCH + ADD -->
+    <div class="top-bar">
+        <input type="text" id="searchInput"
+               placeholder="Search users..."
+               class="search">
+
+    </div>
+
+    <!-- USERS -->
+    <div class="card" id="userContainer">
+
+        {% for u in users %}
+
+        <div class="user-item">
+
+            <div class="user-top">
+                <div>
+                    <div class="username">{{ u.username }}</div>
+                    <div class="email">{{ u.email }}</div>
+                </div>
+
+                {% if u.is_staff %}
+                    <div class="badge admin">Admin</div>
+                {% else %}
+                    <div class="badge normal">User</div>
+                {% endif %}
+            </div>
+
+            <div class="actions">
+                <a href="{% url 'edit_user' u.id %}" class="edit">Edit</a>
+                <a href="{% url 'delete_user' u.id %}"
+                   class="delete"
+                   onclick="return confirm('Delete this user?')">
+                   Delete
+                </a>
+            </div>
+
+        </div>
+
+        {% empty %}
+        <p style="color:#6b7280;">No users found</p>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+
+<!-- 🔥 AJAX SCRIPT -->
+<script>
+
+const input = document.getElementById('searchInput');
+const container = document.getElementById('userContainer');
+const count = document.getElementById('userCount');
+
+let timeout = null;
+
+input.addEventListener('keyup', function() {
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+
+        const query = input.value;
+
+        fetch(`?q=${query}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(res => res.json())
+        .then(data => {
+
+            container.innerHTML = '';
+            count.innerText = data.users.length;
+
+            if (data.users.length === 0) {
+                container.innerHTML = '<p style="color:#6b7280;">No users found</p>';
+                return;
+            }
+
+            data.users.forEach(u => {
+
+                const badge = u.is_staff
+                    ? '<div class="badge admin">Admin</div>'
+                    : '<div class="badge normal">User</div>';
+
+                const item = `
+                    <div class="user-item">
+
+                        <div class="user-top">
+                            <div>
+                                <div class="username">${u.username}</div>
+                                <div class="email">${u.email}</div>
+                            </div>
+
+                            ${badge}
+                        </div>
+
+                        <div class="actions">
+                            <a href="/control-panel/users/edit/${u.id}/" class="edit">Edit</a>
+                            <a href="/control-panel/users/delete/${u.id}/"
+                               class="delete"
+                               onclick="return confirm('Delete this user?')">
+                               Delete
+                            </a>
+                        </div>
+
+                    </div>
+                `;
+
+                container.innerHTML += item;
+            });
+
+        });
+
+    }, 300); // 🔥 debounce (smooth typing)
+
+});
+
+</script>
+
+{% endblock %}

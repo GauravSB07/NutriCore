@@ -1,0 +1,323 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+/* 💥 RIPPLE EFFECT */
+.ripple {
+    position: absolute;
+    border-radius: 9999px;
+    transform: scale(0);
+    animation: ripple 0.6s linear;
+    background: rgba(139,92,246,0.3);
+}
+
+@keyframes ripple {
+    to {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+/* ===== FOOD HEADER ===== */
+.food-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* TEXT */
+.food-header-left h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.food-header-left p {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* ICON (UNIQUE LOOK) */
+.food-header-icon {
+    width: 55px;
+    height: 55px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 24px;
+
+    border-radius: 16px;
+
+    background: linear-gradient(135deg,#fbcfe8,#ddd6fe);
+    color: #7c3aed;
+
+    box-shadow: 0 6px 14px rgba(124,58,237,0.15);
+}
+
+/* DIVIDER */
+.food-header-divider {
+    margin-top: 14px;
+    height: 2px;
+    width: 100%;
+    border-radius: 10px;
+
+    background: linear-gradient(
+        to right,
+        rgba(124,58,237,0.6),
+        rgba(167,139,250,0.2)
+    );
+}
+</style>
+
+
+<div class="px-4 pt-4 pb-6 space-y-5">
+
+    <!-- 🔝 HEADER -->
+    <div class="food-header">
+
+        <div class="food-header-left">
+            <h1>Food Library 🍱</h1>
+            <p>Explore foods, calories & nutrition</p>
+        </div>
+
+        <div class="food-header-icon">
+            🍲
+        </div>
+
+    </div>
+
+    <div class="food-header-divider"></div>
+
+
+    <!-- 🔥 CATEGORY FILTERS -->
+    <div id="category-filters" class="flex flex-wrap gap-2">
+
+        {% for c in categories %}
+        <button class="filter-btn px-3 py-2 rounded-xl bg-white shadow text-sm transition"
+                data-id="{{ c.id }}">
+            {{ c.name }}
+        </button>
+        {% endfor %}
+
+        <button id="clear-filters"
+                class="px-3 py-2 rounded-xl bg-gradient-to-r from-pink-500 to-purple-500 text-white text-sm">
+            ✕ Clear
+        </button>
+
+    </div>
+
+
+    <!-- 🔍 SEARCH -->
+    <div class="relative">
+        <input type="text" id="food-search"
+            placeholder="Search food..."
+            class="w-full px-4 py-3 rounded-xl bg-white shadow outline-none">
+
+        <div id="suggestions"
+            class="absolute w-full bg-white rounded-xl shadow mt-1 hidden z-50 max-h-40 overflow-y-auto">
+        </div>
+    </div>
+
+
+    <!-- 🔥 GRID -->
+    <div class="grid grid-cols-2 gap-4">
+
+        {% for food in foods %}
+        <a href="{% url 'nutrition:food_detail' food.id %}"
+           class="food-card relative overflow-hidden block bg-white rounded-2xl p-3 shadow-sm 
+                  transition duration-200 hover:scale-[1.02] active:scale-[0.96]"
+           data-name="{{ food.name|lower }}"
+           data-categories="{% for cat in food.categories.all %}{{ cat.id }} {% endfor %}">
+
+            <!-- IMAGE -->
+            <div class="relative">
+                {% if food.image %}
+                <img src="{{ food.image.url }}"
+                     class="w-full h-28 object-cover rounded-xl">
+                {% else %}
+                <div class="w-full h-28 bg-gray-100 rounded-xl flex items-center justify-center text-xs">
+                    No Image
+                </div>
+                {% endif %}
+
+            </div>
+
+            <!-- NAME -->
+            <h3 class="mt-2 text-sm font-semibold text-gray-800">
+                {{ food.name }}
+            </h3>
+
+        <p class="text-xs text-gray-500 mt-1">
+            {% if food.serving_name and food.serving_quantity %}
+                {{ food.serving_name|title }} ≈ {{ food.serving_quantity }}
+                
+                {% if food.unit_type == "g" %}
+                    Grams
+                {% elif food.unit_type == "ml" %}
+                    Ml
+                {% elif food.unit_type == "piece" %}
+                    Piece
+                {% else %}
+                    {{ food.unit_type|title }}
+                {% endif %}
+                
+            {% else %}
+                {% if food.unit_type == "g" %}
+                    Grams
+                {% elif food.unit_type == "ml" %}
+                    Ml
+                {% elif food.unit_type == "piece" %}
+                    Piece
+                {% else %}
+                    {{ food.unit_type|title }}
+                {% endif %}
+            {% endif %}
+        </p>
+
+            <!-- CALORIES -->
+            <p class="text-xs mt-1 text-orange-500">
+                🔥
+                {% if food.unit_type == 'g' %}
+                    {{ food.calories_per_100g }} kcal / 100g
+                {% elif food.unit_type == 'ml' %}
+                    {{ food.calories_per_100g }} kcal / 100ml
+                {% else %}
+                    {{ food.calories_per_unit }} kcal / piece
+                {% endif %}
+            </p>
+
+            <!-- PROTEIN -->
+            <p class="text-xs text-purple-500">
+                💪
+                {% if food.unit_type == 'g' %}
+                    {{ food.protein_per_100g }} g
+                {% elif food.unit_type == 'ml' %}
+                    {{ food.protein_per_100g }} g
+                {% else %}
+                    {{ food.protein_per_unit }} g
+                {% endif %}
+                protein
+            </p>
+
+        </a>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+
+<!-- 🔥 SCRIPT -->
+<script>
+const buttons = document.querySelectorAll(".filter-btn");
+const clearBtn = document.getElementById("clear-filters");
+const cards = document.querySelectorAll(".food-card");
+const searchInput = document.getElementById("food-search");
+const suggestionsBox = document.getElementById("suggestions");
+
+let selected = new Set();
+
+// CATEGORY FILTER
+buttons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const id = btn.getAttribute("data-id");
+
+        if (selected.has(id)) {
+            selected.delete(id);
+            btn.classList.remove("bg-purple-500", "text-white");
+        } else {
+            selected.add(id);
+            btn.classList.add("bg-purple-500", "text-white");
+        }
+
+        filterFoods();
+    });
+});
+
+// CLEAR
+clearBtn.addEventListener("click", () => {
+    selected.clear();
+    buttons.forEach(btn => btn.classList.remove("bg-purple-500", "text-white"));
+    searchInput.value = "";
+    suggestionsBox.classList.add("hidden");
+    filterFoods();
+});
+
+// SEARCH
+const foodNames = Array.from(cards).map(card => card.getAttribute("data-name"));
+
+searchInput.addEventListener("keyup", function () {
+    const value = searchInput.value.toLowerCase();
+    suggestionsBox.innerHTML = "";
+
+    const matches = foodNames.filter(name => name.includes(value)).slice(0, 5);
+
+    matches.forEach(name => {
+        const div = document.createElement("div");
+        div.innerText = name;
+        div.className = "px-3 py-2 hover:bg-gray-100 cursor-pointer";
+
+        div.onclick = () => {
+            searchInput.value = name;
+            suggestionsBox.classList.add("hidden");
+            filterFoods();
+        };
+
+        suggestionsBox.appendChild(div);
+    });
+
+    suggestionsBox.classList.toggle("hidden", matches.length === 0);
+    filterFoods();
+});
+
+// FILTER LOGIC
+function filterFoods() {
+    const searchValue = searchInput.value.toLowerCase();
+
+    cards.forEach(card => {
+        const name = card.getAttribute("data-name");
+        const cats = card.getAttribute("data-categories").split(" ");
+
+        const matchSearch = name.includes(searchValue);
+
+        const matchCategory =
+            selected.size === 0 ||
+            [...selected].every(id => cats.includes(id));
+
+        card.style.display = (matchSearch && matchCategory) ? "block" : "none";
+    });
+}
+
+// RIPPLE EFFECT
+document.querySelectorAll(".food-card").forEach(card => {
+    card.addEventListener("click", function(e) {
+        const circle = document.createElement("span");
+        const diameter = Math.max(this.clientWidth, this.clientHeight);
+
+        circle.style.width = circle.style.height = diameter + "px";
+        circle.style.left = e.offsetX - diameter / 2 + "px";
+        circle.style.top = e.offsetY - diameter / 2 + "px";
+
+        circle.classList.add("ripple");
+
+        const ripple = this.getElementsByClassName("ripple")[0];
+        if (ripple) ripple.remove();
+
+        this.appendChild(circle);
+    });
+});
+
+// CLOSE DROPDOWN
+document.addEventListener("click", function (e) {
+    if (!searchInput.contains(e.target)) {
+        suggestionsBox.classList.add("hidden");
+    }
+});
+</script>
+
+{% endblock %}

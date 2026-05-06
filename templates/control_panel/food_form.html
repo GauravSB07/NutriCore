@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+nav, .navbar, .bottom-nav, .top-nav, header { display:none!important; }
+
+body {
+    margin:0;
+    background: linear-gradient(135deg,#e9d5ff,#c084fc);
+    font-family:'Poppins',sans-serif;
+}
+
+.wrapper { max-width:420px; margin:auto; padding:18px; }
+
+.header { font-size:24px; font-weight:800; margin-bottom:12px; }
+
+.card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(18px);
+    border-radius: 24px;
+    padding: 18px;
+}
+
+.form-grid {
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.full { grid-column:span 2; }
+
+input, select {
+    width:100%;
+    padding:10px;
+    border-radius:12px;
+    border:1px solid rgba(124,58,237,0.2);
+}
+
+.btn {
+    width:100%;
+    padding:12px;
+    margin-top:16px;
+    border:none;
+    border-radius:14px;
+    background: linear-gradient(to right,#7c3aed,#a78bfa);
+    color:white;
+}
+
+/* UNIT */
+.unit-options { display:flex; gap:8px; flex-wrap:wrap; }
+.unit-pill { padding:8px 12px; background:#eee; border-radius:10px; cursor:pointer; }
+.unit-pill.active { background:#7c3aed; color:white; }
+
+/* CATEGORY */
+.category-grid { display:flex; flex-wrap:wrap; gap:8px; }
+.category-pill {
+    padding:8px 12px;
+    background:#eee;
+    border-radius:10px;
+    cursor:pointer;
+}
+.category-pill.active { background:#7c3aed; color:white; }
+
+.preview img { width:70px; border-radius:10px; }
+.error-box { color:red; margin-bottom:10px; }
+</style>
+
+<div class="wrapper">
+
+<div class="header">Add / Edit Food 🍽</div>
+
+<div class="card">
+
+<!-- 🔥 SHOW ERRORS -->
+{% if form.errors %}
+<div class="error-box">
+    {{ form.errors }}
+</div>
+{% endif %}
+
+<form method="POST" enctype="multipart/form-data">
+{% csrf_token %}
+
+<div class="form-grid">
+
+<div class="full">
+<label>Name</label>
+{{ form.name }}
+</div>
+
+<div>
+<label>Calories / 100g</label>
+{{ form.calories_per_100g }}
+</div>
+
+<div>
+<label>Protein / 100g</label>
+{{ form.protein_per_100g }}
+</div>
+
+<div>
+<label>Calories / Unit</label>
+{{ form.calories_per_unit }}
+</div>
+
+<div>
+<label>Protein / Unit</label>
+{{ form.protein_per_unit }}
+</div>
+
+<!-- UNIT -->
+<div class="full">
+<label>Unit Type</label>
+<div class="unit-options">
+{% for value, label in form.unit_type.field.choices %}
+<div class="unit-pill"
+     data-value="{{ value }}"
+     onclick="selectUnit(this)">
+{{ label }}
+</div>
+{% endfor %}
+</div>
+
+<input type="hidden" name="unit_type" id="unitInput"
+       value="{{ form.unit_type.value }}">
+</div>
+
+<div>
+<label>Serving Name</label>
+{{ form.serving_name }}
+</div>
+
+<div>
+<label>Serving Quantity</label>
+{{ form.serving_quantity }}
+</div>
+
+<!-- IMAGE -->
+<div class="full">
+<label>Image</label>
+
+{% if form.instance.image %}
+<div class="preview">
+<img src="{{ form.instance.image.url }}">
+</div>
+{% endif %}
+
+<input type="file" name="image">
+</div>
+
+<!-- CATEGORY -->
+<div class="full">
+<label>Categories</label>
+
+<div class="category-grid">
+{% for c in form.categories.field.queryset %}
+<div class="category-pill
+{% if c in form.instance.categories.all %}active{% endif %}"
+data-id="{{ c.id }}"
+onclick="toggleCategory(this)">
+{{ c.name }}
+</div>
+{% endfor %}
+</div>
+
+<input type="hidden" name="categories" id="categoryInput">
+</div>
+
+</div>
+
+<button type="submit" class="btn">Save Food</button>
+
+</form>
+
+</div>
+</div>
+
+<script>
+
+/* UNIT */
+function selectUnit(el){
+    document.querySelectorAll('.unit-pill').forEach(p=>p.classList.remove('active'));
+    el.classList.add('active');
+    document.getElementById('unitInput').value = el.dataset.value;
+}
+
+window.onload = ()=>{
+    const val = document.getElementById('unitInput').value;
+    document.querySelectorAll('.unit-pill').forEach(p=>{
+        if(p.dataset.value===val) p.classList.add('active');
+    });
+};
+
+/* CATEGORY */
+function toggleCategory(el){
+    el.classList.toggle('active');
+    updateCategories();
+}
+
+function updateCategories(){
+    let selected = [];
+    document.querySelectorAll('.category-pill.active').forEach(el=>{
+        selected.push(el.dataset.id);
+    });
+    document.getElementById('categoryInput').value = selected.join(',');
+}
+
+window.addEventListener('load', updateCategories);
+
+</script>
+
+{% endblock %}

@@ -1,0 +1,324 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+
+/* REMOVE NAV */
+nav, .navbar, .bottom-nav, .top-nav, header {
+    display: none !important;
+}
+
+body{
+    margin:0;
+    background:linear-gradient(135deg,#e9d5ff,#c084fc);
+    font-family:'Poppins',sans-serif;
+}
+
+/* WRAPPER */
+.wrapper{
+    max-width:420px;
+    margin:auto;
+    padding:18px;
+}
+
+/* BACK */
+.back-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+
+    padding:6px 10px;
+    margin-bottom:12px;
+
+    border-radius:10px;
+
+    background:rgba(255,255,255,0.6);
+    border:1px solid rgba(124,58,237,0.2);
+
+    font-size:12px;
+    font-weight:600;
+    color:#6b7280;
+    text-decoration:none;
+}
+
+.back-btn:hover{
+    background:#ede9fe;
+    color:#7c3aed;
+}
+
+/* HEADER */
+.header{
+    font-size:24px;
+    font-weight:800;
+    margin-bottom:14px;
+}
+
+/* CARD */
+.card{
+    background:rgba(255,255,255,0.82);
+    backdrop-filter:blur(18px);
+
+    border-radius:24px;
+    padding:18px;
+
+    border:1px solid rgba(124,58,237,0.1);
+}
+
+/* GRID */
+.form-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:12px;
+}
+
+.full{
+    grid-column:span 2;
+}
+
+/* LABEL */
+label{
+    font-size:12px;
+    font-weight:600;
+    color:#4b5563;
+}
+
+/* INPUTS */
+/* INPUTS */
+input,
+textarea{
+    width:100%;
+    padding:12px;
+    margin-top:5px;
+
+    border-radius:14px;
+    border:1px solid rgba(124,58,237,0.18);
+
+    background:rgba(255,255,255,0.8);
+
+    font-size:13px;
+    font-family:'Poppins',sans-serif;
+
+    outline:none;
+    box-sizing:border-box;
+}
+
+/* CUSTOM SELECT */
+select{
+    width:100%;
+    padding:12px 42px 12px 14px;
+    margin-top:5px;
+
+    border-radius:16px;
+    border:1px solid rgba(124,58,237,0.18);
+
+    background:
+        linear-gradient(145deg,#ffffff,#f5f3ff);
+
+    font-size:13px;
+    font-family:'Poppins',sans-serif;
+    color:#374151;
+
+    outline:none;
+    cursor:pointer;
+
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+
+    box-sizing:border-box;
+
+    transition:0.2s;
+
+    /* 🔥 CUSTOM ARROW */
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' fill='%237c3aed' viewBox='0 0 256 256'%3E%3Cpath d='M208.49 88.49a12 12 0 0 0-17 0L128 152 64.49 88.49a12 12 0 0 0-17 17l72 72a12 12 0 0 0 17 0l72-72a12 12 0 0 0 0-17Z'%3E%3C/path%3E%3C/svg%3E");
+
+    background-repeat:no-repeat;
+    background-position:right 14px center;
+    background-size:18px;
+}
+
+/* OPTION */
+select option{
+    background:white;
+    color:#111827;
+    padding:10px;
+}
+
+/* FOCUS */
+input:focus,
+textarea:focus,
+select:focus{
+    border-color:#7c3aed;
+
+    box-shadow:
+        0 0 0 3px rgba(124,58,237,0.15);
+}
+
+input:focus,
+select:focus,
+textarea:focus{
+    border-color:#7c3aed;
+    box-shadow:0 0 0 3px rgba(124,58,237,0.15);
+}
+
+/* TEXTAREAS */
+textarea{
+    min-height:110px;
+    resize:none;
+}
+
+/* IMAGE */
+.preview{
+    margin-top:10px;
+}
+
+.preview img{
+    width:90px;
+    height:90px;
+    border-radius:16px;
+    object-fit:cover;
+}
+
+/* BUTTON */
+.btn{
+    width:100%;
+    padding:13px;
+    margin-top:18px;
+
+    border:none;
+    border-radius:16px;
+
+    background:linear-gradient(to right,#7c3aed,#a78bfa);
+
+    color:white;
+    font-size:14px;
+    font-weight:700;
+
+    cursor:pointer;
+
+    transition:0.2s;
+}
+
+.btn:hover{
+    transform:translateY(-1px);
+}
+
+/* ERROR */
+.error-box{
+    background:#fee2e2;
+    color:#dc2626;
+
+    padding:10px;
+    border-radius:12px;
+
+    font-size:12px;
+    margin-bottom:12px;
+}
+
+</style>
+
+
+<div class="wrapper">
+
+    <!-- HEADER -->
+    <div class="header">
+        Add / Edit Recipe 📖
+        <a href="{% url 'recipe_list' %}" class="back-btn">
+        ← Recipes
+        </a>
+    </div>
+
+    <!-- CARD -->
+    <div class="card">
+
+        <!-- ERRORS -->
+        {% if form.errors %}
+        <div class="error-box">
+            {{ form.errors }}
+        </div>
+        {% endif %}
+
+        <form method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <div class="form-grid">
+
+                <!-- NAME -->
+                <div class="full">
+                    <label>Name</label>
+                    {{ form.name }}
+                </div>
+
+                <!-- CATEGORY -->
+                <div class="full">
+                    <label>Category</label>
+                    {{ form.category }}
+                </div>
+
+                <!-- IMAGE -->
+                <div class="full">
+
+                    <label>Recipe Image</label>
+
+                    {% if form.instance.image %}
+                    <div class="preview">
+                        <img src="{{ form.instance.image.url }}">
+                    </div>
+                    {% endif %}
+
+                    <input type="file" name="image">
+
+                </div>
+
+                <!-- CALORIES -->
+                <div>
+                    <label>Calories</label>
+                    {{ form.calories }}
+                </div>
+
+                <!-- PROTEIN -->
+                <div>
+                    <label>Protein</label>
+                    {{ form.protein }}
+                </div>
+
+                <!-- PRICE -->
+                <div class="full">
+                    <label>Price</label>
+                    {{ form.price }}
+                </div>
+
+                <!-- INGREDIENTS -->
+                <div class="full">
+                    <label>Ingredients</label>
+                    {{ form.ingredients }}
+                </div>
+
+                <!-- METHOD -->
+                <div class="full">
+                    <label>Method</label>
+                    {{ form.method }}
+                </div>
+
+                <!-- TIPS -->
+                <div class="full">
+                    <label>Tips</label>
+                    {{ form.tips }}
+                </div>
+
+            </div>
+
+            <!-- BUTTON -->
+            <button type="submit" class="btn">
+                Save Recipe
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}

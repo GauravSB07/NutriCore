@@ -1,0 +1,383 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+.glass {
+    backdrop-filter: blur(20px);
+    background: linear-gradient(135deg, rgba(255,255,255,0.75), rgba(240,235,255,0.9));
+    border: 1px solid rgba(255,255,255,0.6);
+    box-shadow: 0 10px 25px rgba(139,92,246,0.15);
+}
+
+.input {
+    background: rgba(245,243,255,0.9);
+    border: 1px solid rgba(139,92,246,0.2);
+    border-radius: 16px;
+    padding: 12px;
+    width: 100%;
+    outline: none;
+}
+
+.btn {
+    background: linear-gradient(135deg,#7c3aed,#a78bfa);
+    color: white;
+    padding: 14px;
+    border-radius: 20px;
+    width: 100%;
+    box-shadow: 0 10px 25px rgba(124,58,237,0.35);
+}
+
+/* FOOD CARDS */
+.food-card {
+    display: flex;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 14px;
+    cursor: pointer;
+}
+.food-card:hover {
+    background: rgba(139,92,246,0.08);
+}
+.food-img {
+    width: 45px;
+    height: 45px;
+    border-radius: 10px;
+    object-fit: cover;
+}
+
+/* PREVIEW */
+.preview-card {
+    background: linear-gradient(135deg, #ffffff, #f3f0ff);
+    border-radius: 16px;
+    padding: 12px;
+    box-shadow: 0 6px 15px rgba(139,92,246,0.15);
+}
+
+/* 🔥 PREMIUM DROPDOWN */
+.dropdown {
+    position: absolute;
+    width: 100%;
+    background: white;
+    border-radius: 16px;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.12);
+    overflow: hidden;
+    z-index: 50;
+}
+
+.dropdown div {
+    padding: 12px;
+    cursor: pointer;
+}
+
+.dropdown div:hover {
+    background: rgba(139,92,246,0.1);
+}
+</style>
+
+
+<div class="px-4 pt-4 pb-6">
+
+    <div class="bg-gradient-to-r from-purple-400 to-purple-500 rounded-3xl p-5 text-white mb-5 relative">
+
+        <h2 class="text-lg font-semibold">
+            {% if edit_meal %}
+                Edit Meal
+            {% else %}
+                Log Your Meal
+            {% endif %}
+        </h2>
+
+        {% if edit_meal %}
+        <span class="absolute top-3 right-3 bg-white/20 text-xs px-3 py-1 rounded-full backdrop-blur">
+            Editing
+        </span>
+        {% endif %}
+
+    </div>
+
+    <div class="glass rounded-3xl p-5 space-y-5">
+
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- SEARCH -->
+            <div>
+                <label class="text-sm text-gray-600">Food</label>
+
+                <div class="relative mt-1">
+                    <input type="text" id="food-search" class="input">
+
+                    <input type="hidden" name="food" id="food-id">
+
+                    <div id="suggestions"
+                        class="dropdown mt-2 hidden max-h-60 overflow-y-auto">
+                    </div>
+                </div>
+            </div>
+
+            <!-- QUANTITY -->
+            <div>
+                <label class="text-sm text-gray-600">Quantity</label>
+
+                <div class="flex gap-2 mt-1">
+
+                    <input type="number" id="quantity" name="quantity"
+                        class="input w-2/3" step="0.1">
+
+                    <!-- 🔥 CUSTOM DROPDOWN -->
+                    <div class="relative w-1/3">
+                        <button type="button" id="unit-btn"
+                            class="input flex justify-between items-center">
+                            <span id="unit-text">Grams</span>&#x2B07;
+                        </button>
+
+                        <div id="unit-dropdown" class="dropdown hidden mt-2">
+                            <div data-value="g">Grams</div>
+                            <div data-value="ml">ML</div>
+                            <div data-value="unit">Piece</div>
+                            <div data-value="serving">Serving</div>
+                        </div>
+
+                        <input type="hidden" name="unit" id="unit-select" value="g">
+                    </div>
+
+                </div>
+
+                <p id="unit-label" class="text-xs text-gray-400 mt-1"></p>
+            </div>
+
+            <!-- PREVIEW -->
+            <div class="bg-white/60 rounded-2xl p-3 shadow-sm">
+                <div class="grid grid-cols-2 gap-3">
+
+                    <div class="bg-white rounded-xl p-3 text-center shadow-sm">
+                        <p class="text-xs text-gray-500">Calories</p>
+                        <h3 class="text-lg font-semibold">
+                            <span id="cal-preview">0</span> kcal
+                        </h3>
+                    </div>
+
+                    <div class="bg-white rounded-xl p-3 text-center shadow-sm">
+                        <p class="text-xs text-gray-500">Protein</p>
+                        <h3 class="text-lg font-semibold">
+                            <span id="protein-preview">0</span> g
+                        </h3>
+                    </div>
+
+                </div>
+            </div>
+
+
+            <!-- 🔥 CHEAT BUTTON (SECONDARY) -->
+            <a id="cheat-btn"
+            href="#"
+            class="hidden block text-center 
+                    bg-gradient-to-r from-red-400 to-pink-500 
+                    text-white py-2 rounded-xl shadow-sm 
+                    text-sm font-medium mt-3 opacity-90">
+                🔥 Eat as Cheat Meal
+            </a>
+
+
+            <!-- ➕ ADD BUTTON (PRIMARY) -->
+            <button class="btn mt-2 text-base font-semibold">
+                {% if edit_meal %}
+                    Update Meal
+                {% else %}
+                    + Add Meal
+                {% endif %}
+            </button>
+
+        </form>
+
+    </div>
+
+    <div id="toast"
+         class="fixed bottom-24 left-1/2 -translate-x-1/2 bg-black text-white px-5 py-3 rounded-full shadow-lg opacity-0 pointer-events-none transition-all duration-500">
+    </div>
+
+</div>
+
+
+<script>
+const foods = [
+{% for food in form.food.field.queryset %}
+{
+id: "{{ food.id }}",
+name: "{{ food.name|escapejs }}",
+image: "{% if food.image %}{{ food.image.url }}{% else %}/static/images/login.jpg{% endif %}",
+unit: "{{ food.unit_type }}",
+cal100: {{ food.calories_per_100g|default:"0" }},
+prot100: {{ food.protein_per_100g|default:"0" }},
+calUnit: {{ food.calories_per_unit|default:"0" }},
+protUnit: {{ food.protein_per_unit|default:"0" }},
+serving_qty: {{ food.serving_quantity|default:"0" }}
+}{% if not forloop.last %},{% endif %}
+{% endfor %}
+];
+
+// 🔥 EDIT DATA
+const editMeal = {
+    id: "{{ edit_meal.food.id|default:'' }}",
+    quantity: "{{ edit_meal.quantity|default:'' }}",
+    unit: "{{ edit_meal.unit|default:'g' }}"
+};
+
+let selectedFood = null;
+
+// SEARCH
+const search = document.getElementById("food-search");
+const box = document.getElementById("suggestions");
+const cheatBtn = document.getElementById("cheat-btn");
+
+search.addEventListener("keyup", () => {
+const val = search.value.toLowerCase();
+box.innerHTML = "";
+
+if (!val) return box.classList.add("hidden");
+
+foods.filter(f => f.name.toLowerCase().includes(val)).slice(0,5)
+.forEach(f => {
+
+let calText = f.cal100 > 0 ? f.cal100 + " kcal" :
+              f.calUnit > 0 ? f.calUnit + " kcal" : "No data";
+
+let protText = f.prot100 > 0 ? f.prot100 + "g" :
+               f.protUnit > 0 ? f.protUnit + "g" : "No data";
+
+const div = document.createElement("div");
+div.className = "food-card";
+
+div.innerHTML = `
+<img src="${f.image}" class="food-img">
+<div>
+<p>${f.name}</p>
+<p class="text-xs text-gray-500">${calText} • ${protText}</p>
+</div>
+`;
+
+div.onclick = () => {
+    search.value = f.name;
+    document.getElementById("food-id").value = f.id;
+    selectedFood = f;
+
+    // 🔥 AUTO UNIT
+    let defaultUnit = f.cal100 > 0 ? "g" : "unit";
+
+    document.getElementById("unit-select").value = defaultUnit;
+
+    const unitTextMap = {
+        g: "Grams",
+        ml: "ML",
+        unit: "Piece",
+        serving: "Serving"
+    };
+
+    document.getElementById("unit-text").innerText = unitTextMap[defaultUnit];
+
+    // auto quantity
+    if (!document.getElementById("quantity").value) {
+        document.getElementById("quantity").value = defaultUnit === "unit" ? 1 : 100;
+    }
+
+    box.classList.add("hidden");
+
+        // 🔥 UPDATE CHEAT BUTTON LINK
+    cheatBtn.href = `/nutrition/cheat/${f.id}/`;
+    cheatBtn.classList.remove("hidden", "opacity-50", "pointer-events-none");
+
+    updatePreview();
+};
+
+box.appendChild(div);
+});
+
+box.classList.remove("hidden");
+});
+
+
+// DROPDOWN
+const btn = document.getElementById("unit-btn");
+const dd = document.getElementById("unit-dropdown");
+const txt = document.getElementById("unit-text");
+
+btn.onclick = () => dd.classList.toggle("hidden");
+
+dd.querySelectorAll("div").forEach(opt => {
+opt.onclick = () => {
+txt.innerText = opt.innerText;
+document.getElementById("unit-select").value = opt.dataset.value;
+dd.classList.add("hidden");
+updatePreview();
+};
+});
+
+
+// PREVIEW
+function updatePreview() {
+if (!selectedFood) return;
+
+let q = parseFloat(document.getElementById("quantity").value || 0);
+let unit = document.getElementById("unit-select").value;
+
+if (unit === "serving" && selectedFood.serving_qty) {
+q *= selectedFood.serving_qty;
+unit = selectedFood.unit;
+}
+
+let c = 0, p = 0;
+
+if (unit === "g" || unit === "ml") {
+c = (selectedFood.cal100/100)*q;
+p = (selectedFood.prot100/100)*q;
+} else {
+c = selectedFood.calUnit*q;
+p = selectedFood.protUnit*q;
+}
+
+document.getElementById("cal-preview").innerText = c.toFixed(1);
+document.getElementById("protein-preview").innerText = p.toFixed(1);
+}
+
+document.getElementById("quantity").addEventListener("input", updatePreview);
+
+
+// 🔥 PREFILL EDIT MODE (MAIN FIX)
+window.addEventListener("DOMContentLoaded", () => {
+
+if (!editMeal.id) return;
+
+const f = foods.find(x => x.id == editMeal.id);
+if (!f) return;
+
+selectedFood = f;
+
+// fill fields
+document.getElementById("food-search").value = f.name;
+document.getElementById("food-id").value = f.id;
+document.getElementById("quantity").value = editMeal.quantity;
+document.getElementById("quantity").focus();
+
+// set unit
+document.getElementById("unit-select").value = editMeal.unit;
+
+const unitMap = {
+    g: "Grams",
+    ml: "ML",
+    unit: "Piece",
+    serving: "Serving"
+};
+
+document.getElementById("unit-text").innerText = unitMap[editMeal.unit];
+
+// 🔥 IMPORTANT: preview auto load
+updatePreview();
+
+});
+
+
+</script>
+
+{% endblock %}

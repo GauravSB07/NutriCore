@@ -1,0 +1,174 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="pb-6 space-y-4">
+
+    <!-- 🔥 HEADER -->
+    <div class="relative h-48 rounded-b-3xl overflow-hidden">
+
+        <img src="{% static 'images/cheat_img.jpeg' %}"
+            class="absolute inset-0 w-full h-full object-cover">
+
+        <div class="absolute inset-0 
+            bg-gradient-to-r 
+            from-pink-500/70 via-purple-500/40 to-transparent">
+        </div>
+
+        <div class="relative z-10 h-full flex flex-col justify-center px-5 text-white max-w-[65%]">
+            <h2 class="text-2xl font-bold">🔥 Cheat Meal</h2>
+            <p class="text-sm opacity-90">Use your points wisely</p>
+        </div>
+
+    </div>
+
+    <div class="px-4 space-y-4">
+
+        <!-- 🔔 MESSAGES -->
+        {% if messages %}
+            {% for message in messages %}
+                <div class="p-3 rounded-lg text-sm
+                    {% if message.tags == 'error' %}
+                        bg-red-100 text-red-600
+                    {% else %}
+                        bg-green-100 text-green-600
+                    {% endif %}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <!-- 💎 POINTS -->
+        <div class="bg-white rounded-xl p-3 shadow-sm flex justify-between items-center">
+            <div>
+                <p class="text-xs text-gray-500">Your Points</p>
+                <h2 class="text-xl font-bold text-purple-600">
+                    {{ request.user.profile.points }} pts
+                </h2>
+            </div>
+            <div class="bg-purple-100 text-purple-600 p-2 rounded-full">⭐</div>
+        </div>
+
+        <!-- 🍽 FOOD -->
+        <div class="bg-white rounded-xl p-3 shadow-sm flex items-center gap-3">
+
+            <img src="{% if food.image %}{{ food.image.url }}{% else %}{% static 'images/login.jpg' %}{% endif %}"
+                 class="w-14 h-14 rounded-lg object-cover">
+
+            <div>
+                <h3 class="font-medium text-gray-800 text-sm">
+                    {{ food.name }}
+                </h3>
+                <p class="text-xs text-gray-500">
+                    {% if food.calories_per_100g %}
+                        {{ food.calories_per_100g }} kcal / 100g
+                    {% else %}
+                        {{ food.calories_per_unit }} kcal / piece
+                    {% endif %}
+                </p>
+            </div>
+
+        </div>
+
+        <!-- 📊 STATS -->
+        <div class="grid grid-cols-2 gap-2">
+
+            <div class="bg-white rounded-xl p-3 text-center shadow-sm">
+                <p class="text-xs text-gray-500">Calories</p>
+                <h3 class="font-semibold text-pink-500">
+                    <span id="calorie-preview">0</span> kcal
+                </h3>
+            </div>
+
+            <div class="bg-white rounded-xl p-3 text-center shadow-sm">
+                <p class="text-xs text-gray-500">Points</p>
+                <h3 class="font-semibold text-purple-500">
+                    <span id="points-preview">0</span>
+                </h3>
+            </div>
+
+        </div>
+
+        <!-- 🔥 FORM -->
+        <form method="post" class="space-y-4">
+            {% csrf_token %}
+
+            <!-- 🔢 QUANTITY -->
+            <div class="bg-white rounded-xl p-3 shadow-sm space-y-3">
+
+                <p class="text-xs text-gray-500">Quantity</p>
+
+                <div class="flex items-center gap-2">
+
+                    <button type="button" onclick="changeQty(-1)" 
+                            class="w-9 h-9 rounded-full bg-gray-100">-</button>
+
+                    <input type="number" id="quantity" name="quantity"
+                           value="0"
+                           class="flex-1 text-center bg-gray-100 rounded-lg py-2">
+
+                    <button type="button" onclick="changeQty(1)" 
+                            class="w-9 h-9 rounded-full bg-gray-100">+</button>
+
+                    <span id="unit-label" class="text-xs text-gray-500"></span>
+                </div>
+
+            </div>
+
+            <!-- 🔥 BUTTON -->
+            <button type="submit"
+                class="w-full bg-gradient-to-r from-pink-500 to-purple-500 
+                       text-white py-3 rounded-xl shadow text-sm font-medium">
+                🔥 Eat Cheat Meal
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+
+    const qtyInput = document.getElementById("quantity");
+    const calText = document.getElementById("calorie-preview");
+    const pointText = document.getElementById("points-preview");
+    const unitLabel = document.getElementById("unit-label");
+
+    const unitType = "{{ food.unit_type }}";
+    const cal100 = {{ food.calories_per_100g|default:0 }};
+    const calUnit = {{ food.calories_per_unit|default:0 }};
+
+    unitLabel.innerText =
+        unitType === "g" ? "g" :
+        unitType === "ml" ? "ml" : "pcs";
+
+    function update() {
+        const qty = parseFloat(qtyInput.value) || 0;
+
+        let calories = (unitType === "g" || unitType === "ml")
+            ? (cal100 / 100) * qty
+            : calUnit * qty;
+
+        const points = Math.floor(calories / 4);
+
+        calText.innerText = calories.toFixed(1);
+        pointText.innerText = points;
+    }
+
+    window.changeQty = function(val) {
+        let q = parseFloat(qtyInput.value) || 0;
+        q += val;
+        if (q < 0) q = 0;
+        qtyInput.value = q;
+        update();
+    }
+
+    qtyInput.addEventListener("input", update);
+
+});
+</script>
+
+{% endblock %}

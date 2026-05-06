@@ -1,0 +1,485 @@
+{% extends 'base.html' %}
+{% block content %}
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/tom-select/dist/css/tom-select.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/tom-select/dist/js/tom-select.complete.min.js"></script>
+</head>
+<style>
+
+/* TOM SELECT */
+.ts-wrapper.single .ts-control{
+
+    padding:14px !important;
+
+    border-radius:20px !important;
+
+    border:1.5px solid rgba(124,58,237,0.25) !important;
+
+    background:linear-gradient(145deg,#ffffff,#f5f3ff) !important;
+
+    box-shadow:
+        0 4px 14px rgba(124,58,237,0.08) !important;
+
+    font-family:'Poppins',sans-serif !important;
+
+    font-size:14px !important;
+
+    min-height:58px !important;
+
+    display:flex !important;
+    align-items:center !important;
+}
+
+/* DROPDOWN */
+.ts-dropdown{
+
+    border:none !important;
+
+    border-radius:18px !important;
+
+    overflow:hidden !important;
+
+    margin-top:8px !important;
+
+    box-shadow:
+        0 12px 28px rgba(124,58,237,0.16) !important;
+}
+
+/* OPTION */
+.ts-dropdown .option{
+
+    padding:14px 16px !important;
+
+    font-size:14px !important;
+
+    font-family:'Poppins',sans-serif !important;
+}
+
+/* ACTIVE OPTION */
+.ts-dropdown .active{
+
+    background:#ede9fe !important;
+
+    color:#7c3aed !important;
+}
+
+/* INPUT */
+.ts-control input{
+    font-size:14px !important;
+}
+
+/* REMOVE NAVBAR */
+nav, .navbar, .bottom-nav, .top-nav, header {
+    display: none !important;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: linear-gradient(135deg,#e9d5ff,#c084fc);
+    font-family: 'Poppins', sans-serif;
+}
+
+/* WRAPPER */
+.wrapper {
+    max-width: 420px;
+    margin: auto;
+    padding: 18px;
+}
+
+/* HEADER */
+.header {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 16px;
+    color: #111827;
+}
+
+/* CARD */
+.card {
+    background: rgba(255,255,255,0.78);
+    backdrop-filter: blur(18px);
+
+    border-radius: 26px;
+    padding: 20px;
+
+    border: 1px solid rgba(124,58,237,0.12);
+
+    box-shadow:
+        0 12px 28px rgba(124,58,237,0.12);
+}
+
+/* GRID */
+.form-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+}
+
+/* FULL WIDTH */
+.full {
+    grid-column: span 2;
+}
+
+/* LABEL */
+label {
+    display:block;
+
+    margin-bottom: 6px;
+
+    font-size: 12px;
+    font-weight: 700;
+    color: #4b5563;
+}
+
+/* INPUT */
+input {
+    width: 100%;
+    padding: 13px 14px;
+
+    border-radius: 16px;
+    border: 1.5px solid rgba(124,58,237,0.18);
+
+    background: rgba(255,255,255,0.9);
+
+    outline: none;
+
+    font-size: 14px;
+    font-family: 'Poppins', sans-serif;
+
+    box-sizing: border-box;
+
+    transition: 0.25s;
+
+    box-shadow:
+        0 4px 12px rgba(124,58,237,0.05);
+}
+
+/* INPUT FOCUS */
+input:focus {
+    border-color: #7c3aed;
+
+    box-shadow:
+        0 0 0 4px rgba(124,58,237,0.12),
+        0 8px 18px rgba(124,58,237,0.08);
+}
+
+/* SELECT WRAPPER */
+.select-wrapper{
+    position:relative;
+}
+
+/* CUSTOM SELECT */
+select{
+    width:100%;
+    padding:14px 46px 14px 16px;
+
+    border-radius:18px;
+    border:1.5px solid rgba(124,58,237,0.25);
+
+    background:
+        linear-gradient(145deg,#ffffff,#f5f3ff);
+
+    font-size:14px;
+    font-family:'Poppins',sans-serif;
+    font-weight:500;
+
+    color:#111827;
+
+    outline:none;
+    cursor:pointer;
+
+    appearance:none;
+    -webkit-appearance:none;
+    -moz-appearance:none;
+
+    box-sizing:border-box;
+
+    transition:0.25s;
+
+    box-shadow:
+        0 4px 14px rgba(124,58,237,0.08);
+}
+
+/* CUSTOM ARROW */
+.select-wrapper::after{
+    content:"⌄";
+
+    position:absolute;
+
+    right:16px;
+    top:50%;
+
+    transform:translateY(-48%);
+
+    font-size:20px;
+    font-weight:700;
+
+    color:#7c3aed;
+
+    pointer-events:none;
+}
+
+/* SELECT HOVER */
+select:hover{
+    border-color:#8b5cf6;
+
+    background:
+        linear-gradient(145deg,#ffffff,#ede9fe);
+}
+
+/* SELECT FOCUS */
+select:focus{
+    border-color:#7c3aed;
+
+    box-shadow:
+        0 0 0 4px rgba(124,58,237,0.14),
+        0 8px 20px rgba(124,58,237,0.12);
+}
+
+/* OPTION */
+select option{
+    padding:12px;
+    background:white;
+    color:#111827;
+
+    font-size:14px;
+}
+
+/* FILE INPUT */
+input[type="file"]{
+    background:#faf5ff;
+    padding:12px;
+}
+
+/* BUTTON */
+.btn {
+    width: 100%;
+    padding: 14px;
+    margin-top: 20px;
+
+    border: none;
+    border-radius: 18px;
+
+    background: linear-gradient(to right,#7c3aed,#a78bfa);
+
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+
+    cursor: pointer;
+
+    transition: 0.2s;
+
+    box-shadow:
+        0 10px 24px rgba(124,58,237,0.25);
+}
+
+/* BUTTON HOVER */
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* BACK */
+.back {
+    display: block;
+
+    margin-top: 16px;
+
+    text-align: center;
+
+    font-size: 13px;
+    font-weight: 600;
+
+    color: #6b7280;
+    text-decoration: none;
+}
+
+/* BACK HOVER */
+.back:hover{
+    color:#7c3aed;
+}
+
+</style>
+
+
+<div class="wrapper">
+
+    <!-- HEADER -->
+    <div class="header">
+        Add / Edit Profile 🪪
+    </div>
+
+    <!-- CARD -->
+    <div class="card">
+
+        <form method="POST" enctype="multipart/form-data">
+
+            {% csrf_token %}
+
+            <div class="form-grid">
+
+                <!-- HEIGHT -->
+                <div>
+                    <label>Height</label>
+                    {{ form.height }}
+                </div>
+
+                <!-- WEIGHT -->
+                <div>
+                    <label>Weight</label>
+                    {{ form.weight }}
+                </div>
+
+                <!-- START WEIGHT -->
+                <div>
+                    <label>Start Weight</label>
+                    {{ form.start_weight }}
+                </div>
+
+                <!-- TARGET WEIGHT -->
+                <div>
+                    <label>Target Weight</label>
+                    {{ form.target_weight }}
+                </div>
+
+                <!-- STEPS -->
+                <div>
+                    <label>Daily Steps</label>
+                    {{ form.daily_steps_target }}
+                </div>
+
+                <!-- CALORIES -->
+                <div>
+                    <label>Daily Calories</label>
+                    {{ form.daily_calorie_target }}
+                </div>
+
+                <!-- PROTEIN -->
+                <div>
+                    <label>Daily Protein</label>
+                    {{ form.daily_protein_target}}
+                </div>
+
+                <!-- CHEAT CALORIES -->
+                <div>
+                    <label>Max Cheat Calories</label>
+                    {{ form.max_cheat_calories_per_day }}
+                </div>
+
+                <!-- CHEAT MEALS -->
+                <div>
+                    <label>Max Cheat Meals</label>
+                    {{ form.max_cheat_meals_per_day }}
+                </div>
+
+                <!-- GOAL -->
+                <div class="full">
+
+                    <label>Goal</label>
+
+                        {{ form.goal }}
+                    
+                </div>
+
+                <!-- POINTS -->
+                <div>
+                    <label>Points</label>
+                    {{ form.points }}
+                </div>
+
+                <!-- WATER -->
+                <div>
+                    <label>Water Goal</label>
+                    {{ form.daily_water_goal }}
+                </div>
+
+                <!-- IMAGE -->
+                <div class="full">
+
+                    <label>Profile Image</label>
+
+                    <input type="file"
+                           name="profile_image">
+
+                </div>
+
+            </div>
+
+            <!-- BUTTON -->
+            <button type="submit" class="btn">
+                Save Profile
+            </button>
+
+        </form>
+
+    </div>
+
+    <!-- BACK -->
+    <a href="{% url 'profile_list' %}" class="back">
+        ← Back
+    </a>
+
+</div>
+
+
+<!-- AUTO FILL -->
+<script>
+
+const userSelect = document.getElementById('userSelect');
+
+if(userSelect){
+
+    userSelect.addEventListener('change', function() {
+
+        const userId = this.value;
+
+        if (!userId) return;
+
+        fetch(`/control_panel/get-profile-data/?user_id=${userId}`)
+
+        .then(res => res.json())
+
+        .then(res => {
+
+            if (res.exists) {
+
+                const d = res.data;
+
+                document.getElementById('height').value = d.height || '';
+                document.getElementById('weight').value = d.weight || '';
+                document.getElementById('start_weight').value = d.start_weight || '';
+                document.getElementById('target_weight').value = d.target_weight || '';
+                document.getElementById('steps').value = d.daily_steps_target || '';
+                document.getElementById('calories').value = d.daily_calorie_target || '';
+                document.getElementById('protein').value = d.daily_protein_target || '';
+                document.getElementById('cheat_cal').value = d.max_cheat_calories || '';
+                document.getElementById('cheat_meals').value = d.max_cheat_meals || '';
+                document.getElementById('goal').value = d.goal || '';
+                document.getElementById('points').value = d.points || '';
+                document.getElementById('water').value = d.daily_water_goal || '';
+
+            }
+
+        });
+
+    });
+
+}
+
+new TomSelect("#id_goal",{
+
+    create:false,
+
+    maxOptions:10,
+
+    sortField:{
+        field:"text",
+        direction:"asc"
+    }
+
+});
+
+</script>
+
+{% endblock %}

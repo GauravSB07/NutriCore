@@ -1,0 +1,66 @@
+{% load static %}
+
+{% for r in recipes %}
+
+<div class="recipe-item">
+
+    <div class="recipe-top">
+
+        <!-- IMAGE -->
+        <img src="{% if r.image %}{{ r.image.url }}{% else %}{% static 'images/food_placeholder.png' %}{% endif %}"
+             class="recipe-img">
+
+        <!-- INFO -->
+        <div class="recipe-info">
+
+            <div class="recipe-name">
+                {{ r.name }}
+            </div>
+
+            <div class="recipe-category">
+                {{ r.category }}
+            </div>
+
+            <!-- STATS -->
+            <div class="stats">
+
+                <div class="stat">
+                    🔥 {{ r.calories|default:"—" }} kcal
+                </div>
+
+                <div class="stat">
+                    💪 {{ r.protein|default:"—" }}g
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- ACTIONS -->
+    <div class="actions">
+
+        <a href="{% url 'edit_recipe' r.id %}" class="edit">
+            Edit
+        </a>
+
+        <a href="{% url 'delete_recipe' r.id %}"
+           class="delete"
+           onclick="return confirm('Delete this recipe?')">
+
+            Delete
+
+        </a>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<p style="color:#6b7280;">
+    No recipes found
+</p>
+
+{% endfor %}

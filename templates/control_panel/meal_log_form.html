@@ -1,0 +1,189 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+
+/* REMOVE NAV */
+nav, .navbar, .bottom-nav, .top-nav, header {
+    display: none !important;
+}
+
+body {
+    margin: 0;
+    background: linear-gradient(135deg,#e9d5ff,#c084fc);
+    font-family: 'Poppins', sans-serif;
+}
+
+/* WRAPPER */
+.wrapper {
+    max-width: 420px;
+    margin: auto;
+    padding: 18px;
+}
+
+/* HEADER */
+.header {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 12px;
+}
+
+/* CARD */
+.card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(18px);
+    border-radius: 24px;
+    padding: 18px;
+}
+
+/* INPUT */
+input, select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1px solid rgba(124,58,237,0.2);
+    margin-top: 6px;
+}
+
+/* SEARCH BOX */
+.search-box {
+    position: relative;
+}
+
+.search-results {
+    position: absolute;
+    width: 100%;
+    background: white;
+    border-radius: 12px;
+    max-height: 150px;
+    overflow-y: auto;
+    margin-top: 4px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    display: none;
+    z-index: 10;
+}
+
+.search-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.search-item:hover {
+    background: #ede9fe;
+}
+
+/* BUTTON */
+.btn {
+    width: 100%;
+    padding: 12px;
+    margin-top: 16px;
+    border: none;
+    border-radius: 14px;
+    background: linear-gradient(to right,#7c3aed,#a78bfa);
+    color: white;
+    font-weight: 600;
+}
+
+</style>
+
+<div class="wrapper">
+
+<div class="header">Add / Edit Meal 🍽</div>
+
+<div class="card">
+
+<form method="POST">
+{% csrf_token %}
+
+<!-- USER -->
+<label>User</label>
+{{ form.user }}
+
+<!-- 🔥 FOOD SEARCH -->
+<label>Food</label>
+
+<div class="search-box">
+    <input type="text" id="foodSearch" placeholder="Search food...">
+
+    <div id="searchResults" class="search-results"></div>
+
+    <!-- hidden -->
+    <input type="hidden" name="food" id="foodInput">
+</div>
+
+<!-- QUANTITY + UNIT -->
+<div style="display:flex; gap:10px;">
+    <div style="flex:1;">
+        <label>Quantity</label>
+        {{ form.quantity }}
+    </div>
+
+    <div style="flex:1;">
+        <label>Unit</label>
+        {{ form.unit }}
+    </div>
+</div>
+
+<!-- DATE -->
+<label>Date</label>
+{{ form.date }}
+
+<!-- CHEAT -->
+<label style="display:flex; gap:8px; margin-top:10px;">
+    {{ form.is_cheat }} Cheat Meal
+</label>
+
+<button type="submit" class="btn">Save Meal</button>
+
+</form>
+
+</div>
+</div>
+
+<script>
+
+/* 🔥 FOOD SEARCH DATA */
+const foods = [
+    {% for f in form.food.field.queryset %}
+        {id: "{{ f.id }}", name: "{{ f.name }}"},
+    {% endfor %}
+];
+
+const searchInput = document.getElementById('foodSearch');
+const resultsBox = document.getElementById('searchResults');
+const hiddenInput = document.getElementById('foodInput');
+
+/* SEARCH */
+searchInput.addEventListener('input', function() {
+    const value = this.value.toLowerCase();
+
+    resultsBox.innerHTML = '';
+
+    if (!value) {
+        resultsBox.style.display = 'none';
+        return;
+    }
+
+    const filtered = foods.filter(f => f.name.toLowerCase().includes(value));
+
+    filtered.forEach(f => {
+        const div = document.createElement('div');
+        div.className = 'search-item';
+        div.innerText = f.name;
+
+        div.onclick = () => {
+            searchInput.value = f.name;
+            hiddenInput.value = f.id;
+            resultsBox.style.display = 'none';
+        };
+
+        resultsBox.appendChild(div);
+    });
+
+    resultsBox.style.display = 'block';
+});
+
+</script>
+
+{% endblock %}

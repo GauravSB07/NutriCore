@@ -1,0 +1,517 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>
+        {% block title %}NutriCore{% endblock %}
+    </title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap"
+          rel="stylesheet">
+
+    <link rel="manifest"
+          href="/manifest.json">
+
+    <meta name="theme-color"
+          content="#7c3aed">
+
+    <meta name="apple-mobile-web-app-capable"
+          content="yes">
+
+    <meta name="apple-mobile-web-app-status-bar-style"
+          content="default">
+
+    <meta name="apple-mobile-web-app-title"
+          content="NutriCore">
+
+    <link rel="apple-touch-icon"
+          href="{% static 'images/icons/icon-160.png' %}">
+
+<style>
+
+body{
+    font-family:'Poppins',sans-serif;
+}
+
+/* HIDE SCROLLBAR */
+.no-scrollbar::-webkit-scrollbar{
+    display:none;
+}
+
+/* ===== NAV WRAPPER ===== */
+.bottom-nav-wrapper{
+
+    position:absolute;
+
+    bottom:12px;
+
+    width:100%;
+
+    display:flex;
+    justify-content:center;
+
+    z-index:50;
+}
+
+/* ===== NAV ===== */
+.bottom-nav{
+
+    width:92%;
+    height:72px;
+
+    background:
+        linear-gradient(
+        145deg,
+        rgba(255,255,255,0.94),
+        rgba(243,240,255,0.94));
+
+    backdrop-filter:blur(18px);
+
+    border-radius:30px;
+
+    display:flex;
+    align-items:center;
+    justify-content:space-around;
+
+    border:1px solid rgba(124,58,237,0.12);
+
+    box-shadow:
+        0 15px 35px rgba(124,58,237,0.12),
+        inset 0 1px 3px rgba(255,255,255,0.7);
+}
+
+/* ===== NAV ITEM ===== */
+.nav-item{
+
+    display:flex;
+    flex-direction:column;
+
+    align-items:center;
+    justify-content:center;
+
+    font-size:18px;
+
+    color:#9ca3af;
+
+    transition:0.25s ease;
+}
+
+.nav-item span{
+
+    font-size:10px;
+    font-weight:600;
+
+    margin-top:2px;
+}
+
+/* ACTIVE */
+.nav-item.active{
+    color:#7c3aed;
+}
+
+/* HOVER */
+.nav-item:hover{
+    color:#7c3aed;
+    transform:translateY(-1px);
+}
+
+/* CENTER BUTTON */
+.nav-center{
+
+    width:60px;
+    height:60px;
+
+    background:
+        linear-gradient(
+        135deg,
+        #7c3aed,
+        #a78bfa);
+
+    color:white;
+
+    border-radius:50%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    font-size:22px;
+
+    margin-top:-42px;
+
+    box-shadow:
+        0 12px 25px rgba(124,58,237,0.35),
+        0 0 0 6px #f8f6fb;
+
+    transition:0.25s;
+}
+
+.nav-center:hover{
+    transform:scale(1.06);
+}
+
+</style>
+
+</head>
+
+
+<body class="bg-gradient-to-br
+             from-purple-300
+             via-purple-300
+             to-violet-400
+
+             min-h-screen
+             flex
+             items-center
+             justify-center">
+
+
+<!-- 📱 PHONE -->
+<div class="w-full
+            max-w-[390px]
+            h-[95vh]
+
+            bg-[#f8f6fb]
+
+            rounded-[34px]
+
+            shadow-[0_20px_60px_rgba(76,29,149,0.25)]
+
+            overflow-hidden
+
+            relative
+
+            flex
+            flex-col">
+
+
+<!-- 🔝 COMPACT PREMIUM HEADER -->
+<div class="w-full
+            z-30
+            flex-shrink-0">
+
+    <div class="mx-3
+                mt-3
+
+                rounded-[26px]
+
+                bg-gradient-to-r
+                from-[#faf7ff]
+                to-[#f4efff]
+
+                border border-white/60
+
+                shadow-[0_8px_25px_rgba(124,58,237,0.08)]
+
+                px-4
+                py-4">
+
+        <div class="flex
+                    items-center
+                    justify-between">
+
+            <!-- LEFT -->
+            <div class="flex
+                        items-center
+                        gap-3">
+
+                <!-- LOGO -->
+                <div class="w-14
+                            h-14
+
+                            rounded-2xl
+
+                            bg-white
+
+                            flex
+                            items-center
+                            justify-center
+
+                            shadow-md
+
+                            border border-purple-100">
+
+                    <img src="{% static 'images/logo.png' %}"
+                         class="w-10 h-10 object-contain">
+
+                </div>
+
+                <!-- BRAND -->
+                <div>
+
+                    <h1 class="leading-none">
+
+                        <span class="block
+                                     text-[18px]
+                                     font-extrabold
+                                     text-[#7c3aed]">
+
+                            NutriCore
+
+                        </span>
+
+
+                    </h1>
+
+                    <p class="text-[11px]
+                              text-gray-500
+                              font-medium
+                              mt-1">
+
+                        Where nutrition meets strength
+
+                    </p>
+
+                </div>
+
+            </div>
+
+            <!-- RIGHT -->
+            <div class="flex
+                        flex-col
+                        items-end">
+
+                <span class="text-[12px]
+                             text-black-400
+                             mt-1">
+
+                    Built By
+
+                </span>
+
+                </span>
+
+                        <span class="text-[11px]
+                        font-semibold
+                        text-[#7c3aed]">
+
+                    -Gaurav
+
+                </span>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+    <!-- 🔄 CONTENT -->
+    <div class="flex-1
+                overflow-y-auto
+                no-scrollbar
+
+                pt-3
+                pb-28">
+
+        {% block content %}
+        {% endblock %}
+
+    </div>
+
+
+    <!-- 🔻 NAVBAR -->
+    <div class="bottom-nav-wrapper">
+
+        <div class="bottom-nav">
+
+            <!-- HOME -->
+            <a href="{% url 'home' %}"
+               class="nav-item active">
+
+                🏠
+
+                <span>Home</span>
+
+            </a>
+
+
+            <!-- MEALS -->
+            <a href="{% url 'nutrition:meal_list' %}"
+               class="nav-item">
+
+                🥘
+
+                <span>Meals</span>
+
+            </a>
+
+
+            <!-- CENTER -->
+            <a href="{% url 'start_workout' %}"
+               class="nav-center">
+
+                🏋🏻
+
+            </a>
+
+
+            <!-- REPORTS -->
+            <a href="{% url 'daily_report' %}"
+               class="nav-item">
+
+                📊
+
+                <span>Reports</span>
+
+            </a>
+
+
+            <!-- PROFILE -->
+            <a href="{% url 'profile' %}"
+               class="nav-item">
+
+                👤
+
+                <span>Profile</span>
+
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- 🍞 TOAST -->
+<div id="toast"
+     class="fixed
+            bottom-24
+            left-1/2
+
+            -translate-x-1/2
+            translate-y-4
+
+            px-5 py-3
+
+            rounded-xl
+
+            shadow-lg
+
+            flex
+            items-center
+            gap-2
+
+            text-white
+            text-sm
+            font-medium
+
+            opacity-0
+            pointer-events-none
+
+            transition-all
+            duration-300
+
+            z-50">
+
+</div>
+
+
+{% if messages %}
+<script>
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+        {% for message in messages %}
+
+        showToast(
+            "{{ message|escapejs }}",
+            "{{ message.tags }}"
+        );
+
+        {% endfor %}
+    }
+);
+
+</script>
+{% endif %}
+
+
+<script>
+
+function showToast(message, type="success") {
+
+    const toast =
+        document.getElementById("toast");
+
+    toast.className =
+        "fixed bottom-24 left-1/2 -translate-x-1/2 translate-y-4 px-5 py-3 rounded-xl shadow-lg flex items-center gap-2 text-white text-sm font-medium opacity-0 pointer-events-none transition-all duration-300 z-50";
+
+    let icon = "✅";
+
+    if(type === "success"){
+
+        toast.classList.add("bg-green-500");
+
+        icon = "✅";
+    }
+
+    else if(type === "error"){
+
+        toast.classList.add("bg-red-500");
+
+        icon = "❌";
+    }
+
+    else if(type === "warning"){
+
+        toast.classList.add(
+            "bg-yellow-400",
+            "text-black"
+        );
+
+        icon = "⚠️";
+    }
+
+    else if(type === "info"){
+
+        toast.classList.add("bg-blue-500");
+
+        icon = "ℹ️";
+    }
+
+    toast.innerHTML =
+        `<span>${icon}</span>
+         <span>${message}</span>`;
+
+    toast.classList.remove(
+        "opacity-0",
+        "translate-y-4"
+    );
+
+    toast.classList.add(
+        "opacity-100",
+        "translate-y-0"
+    );
+
+    setTimeout(() => {
+
+        toast.classList.remove(
+            "opacity-100",
+            "translate-y-0"
+        );
+
+        toast.classList.add(
+            "opacity-0",
+            "translate-y-4"
+        );
+
+    },2500);
+}
+
+</script>
+
+</body>
+</html>

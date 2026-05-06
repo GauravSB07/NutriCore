@@ -1,0 +1,164 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg,#e9d5ff,#c084fc);
+}
+
+/* APP WRAPPER */
+.wrapper {
+    display: flex;
+    justify-content: center;
+    padding: 12px;
+}
+
+.screen {
+    width: 100%;
+    max-width: 420px;
+    background: #f5f3ff;
+    border-radius: 30px;
+    padding: 16px;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.back {
+    width: 40px;
+    height: 40px;
+    background: #ede9fe;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+}
+
+.title {
+    margin-top: 10px;
+    font-size: 22px;
+    font-weight: 700;
+}
+
+/* DAYS */
+.days {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 12px;
+}
+
+.day {
+    text-align: center;
+    font-size: 11px;
+}
+
+.day span {
+    display: block;
+    margin-top: 4px;
+    background: #ede9fe;
+    padding: 8px;
+    border-radius: 12px;
+}
+
+.day.active span {
+    background: linear-gradient(to right,#7c3aed,#a78bfa);
+    color: white;
+}
+
+/* CARD */
+.workout-card {
+    margin-top: 16px;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    height: 130px;
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    color: white;
+    text-decoration: none;
+}
+
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(124,58,237,0.85) 0%,
+        rgba(124,58,237,0.65) 40%,
+        rgba(167,139,250,0.35) 70%,
+        rgba(255,255,255,0) 100%
+    );
+}
+
+/* CONTENT */
+.card-content {
+    position: relative;
+    z-index: 2;
+}
+
+.time {
+    font-size: 12px;
+    opacity: 0.9;
+}
+
+.name {
+    font-size: 22px;
+    font-weight: 700;
+    margin-top: 6px;
+}
+
+/* IMAGE */
+.card-img {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 100%;
+    width: 55%; 
+    object-fit: cover;
+    filter: contrast(1.1) saturate(1.1);
+}
+</style>
+
+
+<div class="wrapper">
+<div class="screen">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div style="font-size:20px;color:#6b7280;text-align:center">CHOOSE WORKOUT</div>
+    </div>
+
+    <div class="title">{{ muscle.name }}</div>
+
+    <!-- WORKOUT CARDS -->
+    {% for s in sub_muscles %}
+    <a href="{% url 'exercise_list' s.id %}" class="workout-card">
+
+        <!-- BACKGROUND IMAGE -->
+        <img src="{% if s.image %}{{ s.image.url }}{% else %}{% static 'images/workout.jpg' %}{% endif %}" class="card-img">
+
+        <!-- GRADIENT -->
+        <div class="overlay"></div>
+
+        <!-- TEXT -->
+        <div class="card-content">
+            <div class="name">{{ s.name|upper }}</div>
+        </div>
+
+    </a>
+    {% endfor %}
+
+</div>
+</div>
+
+{% endblock %}

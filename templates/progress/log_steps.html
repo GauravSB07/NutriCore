@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="px-4 pt-4 space-y-5">
+
+    <!-- HEADER -->
+    <div class="bg-gradient-to-r from-purple-400 to-purple-600 text-white p-5 rounded-2xl">
+        <h2 class="text-xl font-semibold">🚶 Steps Tracker</h2>
+
+        <div class="flex justify-between mt-3 text-sm">
+            <div>
+                <p>Goal</p>
+                <h3 class="text-lg font-bold">{{ goal }}</h3>
+            </div>
+
+            <div>
+                <p>Done</p>
+                <h3 class="text-lg font-bold">{{ total_steps }}</h3>
+            </div>
+        </div>
+    </div>
+
+    <!-- PROGRESS -->
+    <div class="bg-white rounded-xl p-4 shadow">
+        <p>{{ total_steps }} / {{ goal }} steps</p>
+
+        <div class="w-full bg-gray-200 h-2 rounded-full mt-2">
+            <div class="bg-purple-500 h-2 rounded-full"
+                 style="width: {{ progress_percent }}%"></div>
+        </div>
+
+        <p class="text-sm text-gray-500 mt-1">
+            {{ remaining }} steps remaining
+        </p>
+    </div>
+
+    <!-- QUICK ADD -->
+    <form method="post" class="flex gap-3">
+        {% csrf_token %}
+
+        <button name="steps" value="500" class="btn">+500</button>
+        <button name="steps" value="1000" class="btn">+1000</button>
+        <button name="steps" value="2000" class="btn">+2000</button>
+    </form>
+
+    <!-- CUSTOM -->
+    <form method="post" class="flex gap-2">
+        {% csrf_token %}
+        <input type="number" name="steps"
+               class="border p-2 rounded w-full"
+               placeholder="Enter steps">
+
+        <button class="bg-purple-500 text-white px-4 rounded">
+            Add
+        </button>
+    </form>
+
+</div>
+
+{% endblock %}

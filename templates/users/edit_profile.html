@@ -1,0 +1,321 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+body {
+    margin: 0;
+    background: linear-gradient(135deg, #e9d5ff, #c084fc);
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+}
+
+/* WRAPPER */
+.app-wrapper {
+    display: flex;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 12px;
+}
+
+/* MAIN CARD */
+.container {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+    background: rgba(255,255,255,0.97);
+    border-radius: 28px;
+    border: 1px solid rgba(167,139,250,0.3);
+}
+
+/* TITLE */
+.title {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: #6d28d9;
+}
+
+/* PROFILE IMAGE */
+.image-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.preview {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 4px solid #a78bfa;
+}
+
+/* FILE BOX */
+.file-wrapper {
+    width: 100%;
+    background: #f5f3ff;
+    border: 1px solid rgba(167,139,250,0.4);
+    border-radius: 14px;
+    padding: 10px;
+    text-align: center;
+}
+
+/* SECTION */
+.section {
+    margin-top: 18px;
+    background: #f5f3ff;
+    padding: 14px;
+    border-radius: 18px;
+    border: 1px solid rgba(167,139,250,0.25);
+}
+
+/* TITLE */
+.section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #6b7280;
+    margin-bottom: 10px;
+}
+
+/* LABEL */
+.label {
+    font-size: 12px;
+    color: #6b7280;
+    margin-bottom: 4px;
+}
+
+/* INPUT */
+input {
+    width: 100%;
+    padding: 12px;
+    border-radius: 14px;
+    border: 1.5px solid rgba(167,139,250,0.4);
+    margin-bottom: 12px;
+    background: white;
+}
+
+/* 🔥 CLASSY DROPDOWN */
+select {
+    width: 100%;
+    padding: 12px;
+    border-radius: 16px;
+    border: 2px solid #a78bfa;
+    background: #ffffff;
+    font-size: 15px;
+    font-weight: 500;
+    appearance: none;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+select:hover {
+    border-color: #7c3aed;
+}
+
+select:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(124,58,237,0.15);
+}
+
+/* ARROW */
+.select-wrapper {
+    position: relative;
+}
+
+.select-wrapper::after {
+    content: "⌄";
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #7c3aed;
+    font-size: 16px;
+}
+
+/* GRID */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+}
+
+/* BUTTON */
+.btn {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(to right, #7c3aed, #a78bfa);
+    color: white;
+    border: none;
+    border-radius: 16px;
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.custom-dropdown {
+    position: relative;
+}
+
+.dropdown-selected {
+    padding: 12px;
+    border-radius: 16px;
+    border: 2px solid #a78bfa;
+    background: #fff;
+    display: flex;
+    justify-content: space-between;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.dropdown-options {
+    display: none;
+    position: absolute;
+    width: 100%;
+    background: white;
+    border-radius: 14px;
+    margin-top: 6px;
+    overflow: hidden;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    z-index: 10;
+}
+
+.dropdown-options div {
+    padding: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+/* 🔥 NO MORE BLUE HIGHLIGHT */
+.dropdown-options div:hover {
+    background: #ede9fe;
+    color: #6d28d9;
+}
+
+</style>
+
+
+<div class="app-wrapper">
+
+<div class="container">
+
+<div class="title">Edit Profile</div>
+
+<form method="post" enctype="multipart/form-data">
+{% csrf_token %}
+
+<!-- PROFILE IMAGE -->
+<div class="image-box">
+
+{% if request.user.profile.profile_image %}
+<img src="{{ request.user.profile.profile_image.url }}" class="preview" id="preview-img">
+{% else %}
+<img src="{% static 'images/login.jpg' %}" class="preview" id="preview-img">
+{% endif %}
+
+<div class="file-wrapper">
+<input type="file" name="profile_image" onchange="previewImage(event)">
+</div>
+
+</div>
+
+<!-- GOAL -->
+<div class="custom-dropdown">
+
+    <input type="hidden" name="goal" id="goalInput"
+           value="{{ request.user.profile.goal }}">
+
+    <div class="dropdown-selected" onclick="toggleDropdown()">
+        <span id="selectedText">
+            {{ request.user.profile.goal|title }}
+        </span>
+        <span class="arrow">⌄</span>
+    </div>
+
+    <div class="dropdown-options" id="dropdownOptions">
+        <div onclick="selectOption('fat_loss','Fat Loss')">Fat Loss</div>
+        <div onclick="selectOption('muscle_gain','Muscle Gain')">Muscle Gain</div>
+        <div onclick="selectOption('maintain','Maintain')">Maintain</div>
+    </div>
+
+</div>
+
+<!-- PERSONAL STATS -->
+<div class="section">
+<div class="section-title">Personal Stats</div>
+
+<div class="label">Height (cm)</div>
+<input type="number" name="height" value="{{ request.user.profile.height }}" placeholder="Enter height in cm">
+
+<div class="grid-2">
+
+<div>
+<div class="label">Current Weight (kg)</div>
+<input type="number" name="weight" value="{{ request.user.profile.weight }}" placeholder="Current weight">
+</div>
+
+<div>
+<div class="label">Start Weight (kg)</div>
+<input type="number" name="start_weight" value="{{ request.user.profile.start_weight }}" placeholder="Starting weight">
+</div>
+
+</div>
+
+<div class="label">Target Weight (kg)</div>
+<input type="number" name="target_weight" value="{{ request.user.profile.target_weight }}" placeholder="Target weight">
+
+</div>
+
+<!-- DAILY TARGETS -->
+<div class="section">
+<div class="section-title">Daily Targets</div>
+
+<div class="grid-2">
+
+<div>
+<div class="label">Calories Target</div>
+<input type="number" name="daily_calorie_target" value="{{ request.user.profile.daily_calorie_target }}" placeholder="Calories per day">
+</div>
+
+<div>
+<div class="label">Protein Target (g)</div>
+<input type="number" name="daily_protein_target" value="{{ request.user.profile.daily_protein_target }}" placeholder="Protein intake">
+</div>
+
+</div>
+
+<div class="label">Steps Target</div>
+<input type="number" name="daily_steps_target" value="{{ request.user.profile.daily_steps_target }}" placeholder="Daily steps goal">
+
+</div>
+
+<button type="submit" class="btn">Save Changes</button>
+
+</form>
+
+</div>
+
+</div>
+
+<script>
+function previewImage(event) {
+    const img = document.getElementById("preview-img");
+    img.src = URL.createObjectURL(event.target.files[0]);
+}
+
+function toggleDropdown() {
+    const box = document.getElementById("dropdownOptions");
+    box.style.display = box.style.display === "block" ? "none" : "block";
+}
+
+function selectOption(value, text) {
+    document.getElementById("goalInput").value = value;
+    document.getElementById("selectedText").innerText = text;
+    document.getElementById("dropdownOptions").style.display = "none";
+}
+</script>
+
+{% endblock %}

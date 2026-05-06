@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+nav, .navbar, .bottom-nav, .top-nav, header { display:none!important; }
+
+body {
+    margin:0;
+    background:linear-gradient(135deg,#e9d5ff,#c084fc);
+    font-family:'Poppins',sans-serif;
+}
+
+.wrapper { max-width:420px; margin:auto; padding:16px; }
+
+.header { font-size:24px; font-weight:800; }
+.sub-header { font-size:13px; color:#6b7280; margin-bottom:12px; }
+
+.add-btn {
+    padding:10px 14px;
+    border-radius:12px;
+    background:linear-gradient(to right,#7c3aed,#a78bfa);
+    color:white;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:600;
+}
+
+input[type="date"] {
+    width:100%;
+    padding:10px;
+    border-radius:12px;
+    border:1px solid rgba(124,58,237,0.2);
+    background:rgba(255,255,255,0.7);
+    margin:12px 0;
+}
+
+.card {
+    background:rgba(255,255,255,0.85);
+    border-radius:20px;
+    padding:12px;
+}
+
+.meal-item {
+    padding:12px;
+    border-radius:14px;
+    margin-bottom:10px;
+    background:rgba(255,255,255,0.7);
+    border:1px solid rgba(124,58,237,0.1);
+}
+
+.meal-top {
+    display:flex;
+    justify-content:space-between;
+}
+
+.food-name { font-weight:600; }
+.user { font-size:12px; color:#6b7280; }
+
+.info { font-size:12px; margin-top:4px; color:#6b7280; }
+
+.badge {
+    background:#ede9fe;
+    padding:5px 10px;
+    border-radius:12px;
+    font-size:11px;
+}
+
+.actions {
+    margin-top:8px;
+    display:flex;
+    gap:12px;
+    font-size:12px;
+}
+
+.edit { color:#7c3aed; }
+.delete { color:#dc2626; }
+</style>
+
+
+<div class="wrapper">
+
+    <div class="header">Meal Logs 🍽</div>
+    <div class="sub-header">Total Logs: {{ meals|length }}</div>
+
+    <a href="{% url 'add_meal_log' %}" class="add-btn">+ Add Meal</a>
+
+    <!-- 🔥 DATE FILTER -->
+    <input type="date" id="dateFilter">
+
+    <!-- 🔥 LIST -->
+    <div class="card" id="meal-container">
+        {% include 'control_panel/partials/meal_items.html' %}
+    </div>
+
+</div>
+
+
+<script>
+const input = document.getElementById('dateFilter');
+const container = document.getElementById('meal-container');
+
+input.addEventListener('change', function() {
+
+    container.style.opacity = "0.5";
+
+    fetch(`?date=${this.value}`, {
+        method: "GET",
+        headers: {
+            "X-Requested-With": "XMLHttpRequest"
+        }
+    })
+    .then(res => res.json())
+    .then(data => {
+        container.innerHTML = data.html;
+        container.style.opacity = "1";
+    });
+
+});
+</script>
+
+{% endblock %}

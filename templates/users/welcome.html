@@ -1,0 +1,421 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+
+/* REMOVE NAV */
+nav,
+.navbar,
+.bottom-nav,
+.top-nav,
+header{
+    display:none !important;
+}
+
+/* BODY */
+body{
+
+    margin:0;
+
+    background:
+        linear-gradient(
+        135deg,
+        #f3e8ff 0%,
+        #d8b4fe 35%,
+        #c084fc 65%,
+        #9333ea 100%);
+
+    font-family:'Poppins',sans-serif;
+
+    overflow:hidden;
+}
+
+/* PHONE */
+.phone{
+
+    width:100%;
+    max-width:390px;
+    height:95vh;
+
+    margin:auto;
+
+    border-radius:40px;
+
+    overflow:hidden;
+
+    position:relative;
+
+    background:
+        linear-gradient(
+        180deg,
+        rgba(255,255,255,0.35),
+        rgba(255,255,255,0.18));
+
+    backdrop-filter:blur(24px);
+
+    border:1px solid rgba(255,255,255,0.22);
+
+    box-shadow:
+        0 25px 60px rgba(91,33,182,0.22),
+        inset 0 1px 0 rgba(255,255,255,0.2);
+}
+
+/* SCROLL */
+.scroll{
+
+    height:100%;
+
+    overflow-y:auto;
+
+    scrollbar-width:none;
+}
+
+.scroll::-webkit-scrollbar{
+    display:none;
+}
+
+/* HERO */
+.hero{
+    padding:28px 24px 0;
+}
+
+/* TOP */
+.top-nav{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+/* BRAND */
+.brand{
+
+    font-size:34px;
+    font-weight:800;
+
+    color:#4c1d95;
+
+    letter-spacing:-1px;
+}
+
+/* LEAF */
+.leaf-i{
+    position:relative;
+    display:inline-block;
+}
+
+.leaf-i::before{
+
+    content:'🍃';
+
+    position:absolute;
+
+    top:-11px;
+    left:2px;
+
+    font-size:12px;
+
+    transform:rotate(-15deg);
+}
+
+/* LOGO */
+.logo-box{
+
+    width:56px;
+    height:56px;
+
+    border-radius:18px;
+
+    background:rgba(124,58,237,0.12);
+
+    border:1px solid rgba(124,58,237,0.12);
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    backdrop-filter:blur(16px);
+
+    overflow:hidden;
+}
+
+.logo-box img{
+    width:28px;
+    height:28px;
+    object-fit:contain;
+}
+
+/* TAG */
+.tag{
+
+    width:max-content;
+
+    margin-top:24px;
+
+    padding:10px 16px;
+
+    border-radius:999px;
+
+    background:rgba(124,58,237,0.12);
+
+    border:1px solid rgba(124,58,237,0.14);
+
+    color:#6d28d9;
+
+    font-size:11px;
+    font-weight:700;
+
+    letter-spacing:0.6px;
+}
+
+/* TITLE */
+.heading{
+
+    margin-top:24px;
+
+    color:#3b0764;
+
+    font-size:52px;
+    font-weight:800;
+
+    line-height:0.95;
+
+    letter-spacing:-2px;
+}
+
+/* SUB */
+.sub{
+
+    margin-top:18px;
+
+    color:#6b21a8;
+
+    font-size:16px;
+    font-weight:500;
+
+    line-height:1.8;
+}
+
+/* IMAGE CARD */
+.image-card{
+
+    margin-top:28px;
+
+    position:relative;
+
+    height:260px;
+
+    border-radius:34px;
+
+    overflow:hidden;
+
+    box-shadow:
+        0 18px 45px rgba(0,0,0,0.22);
+}
+
+.image-card img{
+
+    width:100%;
+    height:100%;
+
+    object-fit:cover;
+
+    filter:
+        brightness(0.76)
+        contrast(1.05);
+}
+
+/* OVERLAY */
+.overlay{
+
+    position:absolute;
+    inset:0;
+
+    background:
+        linear-gradient(
+        to top,
+        rgba(0,0,0,0.65),
+        rgba(0,0,0,0.12),
+        rgba(0,0,0,0.08));
+}
+
+/* CARD */
+.setup-card{
+
+    margin:24px 18px 30px;
+
+    padding:28px 24px;
+
+    border-radius:34px;
+
+    background:rgba(255,255,255,0.82);
+
+    backdrop-filter:blur(24px);
+
+    border:1px solid rgba(255,255,255,0.42);
+
+    box-shadow:
+        0 14px 40px rgba(91,33,182,0.10);
+
+    text-align:center;
+}
+
+/* WELCOME */
+.welcome{
+
+    font-size:28px;
+    font-weight:800;
+
+    color:#111827;
+
+    line-height:1.2;
+}
+
+/* DESC */
+.desc{
+
+    margin-top:12px;
+
+    color:#6b7280;
+
+    font-size:14px;
+
+    line-height:1.8;
+}
+
+/* BUTTON */
+.setup-btn{
+
+    width:100%;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:10px;
+
+    margin-top:28px;
+
+    padding:16px;
+
+    border-radius:22px;
+
+    background:
+        linear-gradient(
+        135deg,
+        #7c3aed,
+        #a855f7);
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:15px;
+    font-weight:700;
+
+    box-shadow:
+        0 14px 30px rgba(124,58,237,0.22);
+
+    transition:0.2s;
+}
+
+.setup-btn:hover{
+    transform:translateY(-1px);
+}
+
+/* SMALL INFO */
+.small-info{
+
+    margin-top:18px;
+
+    font-size:12px;
+
+    color:#9ca3af;
+}
+
+</style>
+
+<div class="phone">
+
+    <div class="scroll">
+
+        <!-- HERO -->
+        <div class="hero">
+
+            <!-- TOP -->
+            <div class="top-nav">
+
+                <div class="brand">
+                    Nutr<span class="leaf-i">i</span>Core
+                </div>
+
+                <div class="logo-box">
+
+                    <img src="{% static 'images/logo.png' %}"
+                         alt="logo">
+
+                </div>
+
+            </div>
+
+            <!-- TAG -->
+            <div class="tag">
+                ✦ PERSONALIZED FITNESS EXPERIENCE
+            </div>
+
+            <!-- TITLE -->
+            <div class="heading">
+                Welcome<br>
+                {{ user.username }} 🎉
+            </div>
+
+            <!-- SUB -->
+            <div class="sub">
+                Let’s setup your fitness profile and
+                personalize your workouts, nutrition,
+                and progress tracking.
+            </div>
+
+            <!-- IMAGE -->
+            <div class="image-card">
+
+                <img src="{% static 'images/welcome.jpg' %}">
+
+                <div class="overlay"></div>
+
+            </div>
+
+        </div>
+
+        <!-- CARD -->
+        <div class="setup-card">
+
+            <div class="welcome">
+                Start Your Journey 🚀
+            </div>
+
+            <div class="desc">
+                Complete your profile setup to unlock
+                personalized meal plans, workouts,
+                reports, and smart fitness tracking.
+            </div>
+
+            <!-- BUTTON -->
+            <a href="{% url 'edit_profile' %}"
+               class="setup-btn">
+
+               Setup Profile →
+
+            </a>
+
+            <div class="small-info">
+                Takes less than 2 minutes
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

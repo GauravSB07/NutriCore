@@ -1,0 +1,38 @@
+{% for f in foods %}
+<div class="food-item">
+
+    <div class="food-top">
+        <div class="food-left">
+            <img src="{% if f.image %}{{ f.image.url }}{% endif %}" class="food-img">
+            <div class="name">{{ f.name }}</div>
+        </div>
+    </div>
+
+    {% if f.calories_per_100g %}
+        🔥 {{ f.calories_per_100g }} kcal / 100g |
+        💪 {{ f.protein_per_100g|default:"0" }}g
+    {% elif f.calories_per_unit %}
+        🔥 {{ f.calories_per_unit }} kcal / {{ f.serving_name|default:"unit" }} |
+        💪 {{ f.protein_per_unit|default:"0" }}g
+    {% else %}
+        🔥 0 kcal | 💪 0g
+    {% endif %}
+
+    <div class="tags">
+        {% for c in f.categories.all %}
+            <div class="tag">{{ c.name }}</div>
+        {% empty %}
+            <div class="tag">No Category</div>
+        {% endfor %}
+    </div>
+
+    <div class="actions">
+        <a href="{% url 'edit_food' f.id %}" class="edit">Edit</a>
+        <a href="{% url 'delete_food' f.id %}" class="delete"
+           onclick="return confirm('Delete this food?')">Delete</a>
+    </div>
+
+</div>
+{% empty %}
+<p style="color:#6b7280;">No foods found</p>
+{% endfor %}

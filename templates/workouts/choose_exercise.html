@@ -1,0 +1,259 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg,#d8b4fe,#a78bfa);
+}
+
+.container {
+    max-width: 420px;
+    margin: auto;
+    background: #f9fafb;
+    border-radius: 30px;
+    padding: 18px;
+    min-height: 100vh;
+}
+
+/* HERO */
+.hero {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.hero-text small {
+    color: #7c3aed;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+.hero-text h1 {
+    font-size: 26px;
+    font-weight: 800;
+    margin: 5px 0;
+}
+
+.hero-text p {
+    font-size: 12px;
+    color: #6b7280;
+    max-width: 200px;
+}
+
+.hero-img img {
+    width: 110px;
+    height: 110px;
+    object-fit: contain;
+}
+
+/* SECTION */
+.section-title {
+    margin-top: 20px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #6d28d9;
+}
+
+/* LIST */
+.exercise-wrapper {
+    position: relative;
+    padding-left: 10px; 
+}
+
+/* CONNECTOR */
+.connector {
+    position: absolute;
+    left: 45px;
+    top: 20px;
+    bottom: 0;
+    border-left: 2px dotted #c4b5fd;
+}
+
+/* ROW */
+.exercise-row {
+    display: flex;
+    align-items: center;
+    margin-top: 22px;
+    position: relative;
+    padding-left: 10px; 
+}
+
+.circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+    flex-shrink: 0;
+
+    background: #f9fafb;   /* 🔥 SAME as container bg */
+    z-index: 2;            /* 🔥 bring above dotted line */
+}
+
+/* PROGRESS ARC */
+.circle::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 70px;
+    height: 70px;
+    border-radius: 70%;
+    border: 4px solid transparent;
+    border-top: 4px solid #7c3aed;
+    border-right: 4px solid #a78bfa;
+    transform: rotate(90deg);
+    box-sizing: border-box;
+}
+
+/* IMAGE INSIDE CIRCLE */
+.circle img {
+    width: 48px;                 
+    height: 48px;
+    object-fit: contain; 
+    
+    background: transparent;
+}
+
+/* CARD */
+.card {
+    flex: 1;
+    background: white;
+    border-radius: 18px;
+    padding: 14px;
+    margin-left: 10px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+.card h3 {
+    margin: 0;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.card p {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 4px;
+}
+
+/* TAG */
+.tag {
+    display: inline-block;
+    margin-top: 6px;
+    font-size: 11px;
+    background: #ede9fe;
+    color: #6d28d9;
+    padding: 4px 8px;
+    border-radius: 10px;
+}
+
+/* BUTTON */
+.arrow {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg,#7c3aed,#a78bfa);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 18px;
+    margin-left: 10px;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.2);
+}
+
+/* TIP */
+.tip {
+    margin-top: 30px;
+    background: #ede9fe;
+    border-radius: 20px;
+    padding: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.tip img {
+    width: 60px;
+}
+</style>
+
+
+<div class="container">
+
+    <!-- HERO -->
+    <div class="hero">
+
+        <div class="hero-text">
+            <small>EXERCISES</small>
+            <h1>{{ sub_muscle.name }}</h1>
+            <p>Target and strengthen your {{ sub_muscle.name }} effectively.</p>
+        </div>
+
+        <!-- ✅ DYNAMIC SUB MUSCLE IMAGE -->
+        <div class="hero-img">
+            <img src="{% if sub_muscle.image %}{{ sub_muscle.image.url }}{% else %}{% static 'images/muscle.png' %}{% endif %}">
+        </div>
+
+    </div>
+
+
+    <!-- SECTION -->
+    <div class="section-title">CHOOSE AN EXERCISE</div>
+
+
+    <!-- LIST -->
+    <div class="exercise-wrapper">
+
+        <div class="connector"></div>
+
+        {% for e in exercises %}
+        <div class="exercise-row">
+
+            <!-- ✅ DYNAMIC EXERCISE IMAGE -->
+            <div class="circle">
+                <img src="{% if e.image %}{{ e.image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}">
+            </div>
+
+            <!-- CARD -->
+            <div class="card">
+                <h3>{{ e.name|upper }}</h3>
+                <p>{{ e.description|truncatewords:10 }}</p>
+                <span class="tag">Strength</span>
+            </div>
+
+            <!-- BUTTON -->
+            <form method="post" action="{% url 'choose_exercise' sub_muscle.id %}">
+                {% csrf_token %}
+                <input type="hidden" name="exercise" value="{{ e.id }}">
+                <button type="submit" class="arrow">→</button>
+            </form>
+
+        </div>
+        {% endfor %}
+
+    </div>
+
+
+    <!-- TIP -->
+    <div class="tip">
+        <div>
+            <b>Pro Tip</b><br>
+            <span style="font-size:12px;">Control movement & feel the muscle.</span>
+        </div>
+
+        <img src="{% static 'images/protip.png' %}">
+    </div>
+
+</div>
+
+{% endblock %}

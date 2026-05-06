@@ -1,0 +1,198 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+
+/* REMOVE NAV */
+nav, .navbar, .bottom-nav, .top-nav, header{
+    display:none !important;
+}
+
+body{
+    margin:0;
+    background:linear-gradient(135deg,#e9d5ff,#c084fc);
+    font-family:'Poppins',sans-serif;
+}
+
+/* WRAPPER */
+.wrapper{
+    max-width:420px;
+    margin:auto;
+    padding:16px;
+}
+
+/* HEADER */
+.header{
+    font-size:24px;
+    font-weight:800;
+    margin-bottom:6px;
+    color:#111827;
+}
+
+.sub-header{
+    font-size:13px;
+    color:#6b7280;
+    margin-bottom:14px;
+}
+
+/* TOP BAR */
+.top-bar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+}
+
+/* ADD BUTTON */
+.add-btn{
+    padding:10px 14px;
+    border-radius:12px;
+
+    background:linear-gradient(to right,#7c3aed,#a78bfa);
+
+    color:white;
+    text-decoration:none;
+
+    font-size:13px;
+    font-weight:600;
+
+    transition:0.2s;
+
+    box-shadow:
+        0 8px 20px rgba(124,58,237,0.2);
+}
+
+.add-btn:hover{
+    transform:translateY(-1px);
+}
+
+/* CARD */
+.card{
+    background:rgba(255,255,255,0.8);
+    backdrop-filter:blur(18px);
+
+    border-radius:24px;
+    padding:14px;
+
+    border:1px solid rgba(124,58,237,0.1);
+
+    box-shadow:
+        0 10px 25px rgba(124,58,237,0.12);
+}
+
+/* SUB ITEM */
+.sub-item{
+    padding:14px;
+    border-radius:18px;
+    margin-bottom:12px;
+
+    background:rgba(255,255,255,0.65);
+
+    border:1px solid rgba(124,58,237,0.1);
+
+    transition:0.2s;
+}
+
+.sub-item:hover{
+    background:#ede9fe;
+    transform:translateY(-2px);
+}
+
+/* TOP */
+.sub-top{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+/* NAME */
+.sub-name{
+    font-size:15px;
+    font-weight:700;
+    color:#111827;
+}
+
+/* GROUP BADGE */
+.group-badge{
+    margin-top:8px;
+
+    display:inline-flex;
+    align-items:center;
+    gap:5px;
+
+    background:#f5f3ff;
+    color:#7c3aed;
+
+    padding:6px 10px;
+    border-radius:12px;
+
+    font-size:11px;
+    font-weight:600;
+}
+
+/* EMPTY */
+.empty{
+    color:#6b7280;
+    text-align:center;
+    padding:12px;
+    font-size:13px;
+}
+
+</style>
+
+
+<div class="wrapper">
+
+    <!-- HEADER -->
+    <div class="header">
+        Sub Muscles 🧠
+    </div>
+
+    <div class="sub-header">
+        Total Sub Muscles: {{ subs|length }}
+    </div>
+
+    <!-- TOP BAR -->
+    <div class="top-bar">
+
+        <a href="{% url 'add_sub_muscle' %}" class="add-btn">
+            + Add Sub Muscle
+        </a>
+
+    </div>
+
+    <!-- LIST -->
+    <div class="card">
+
+        {% for s in subs %}
+
+        <div class="sub-item">
+
+            <div class="sub-top">
+
+                <div class="sub-name">
+                    {{ s.name }}
+                </div>
+
+            </div>
+
+            <!-- GROUP -->
+            <div class="group-badge">
+                 {{ s.muscle_group.name }}
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="empty">
+            No sub muscles found 🧠
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

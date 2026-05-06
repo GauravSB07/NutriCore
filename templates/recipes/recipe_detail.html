@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+body {
+    background: linear-gradient(135deg, #e9d5ff, #f5f3ff);
+    font-family: 'Poppins', sans-serif;
+
+    margin: 0;
+    padding: 0 12px 90px;
+    overflow-x: hidden; /* 🔥 IMPORTANT FIX */
+}
+
+/* MAIN CONTAINER */
+.container {
+    width: 100%;
+    max-width: 100%;  /* 🔥 prevents overflow */
+    margin: 12px auto;
+    background: rgba(255,255,255,0.95);
+    border-radius: 18px;
+    padding: 14px;
+    box-shadow: 0 12px 25px rgba(139,92,246,0.15);
+
+    box-sizing: border-box; /* 🔥 critical */
+}
+
+/* HEADER */
+.top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px; /* prevents overflow */
+}
+
+/* TITLE */
+.title {
+    font-size: 28px;   /* 🔥 slightly bigger */
+    font-weight: 700;
+    color: #4c1d95;
+    line-height: 1.2;
+
+    word-break: break-word; /* 🔥 prevents overflow */
+}
+
+/* STATS */
+.stats {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.stat {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    border: 2px solid #c084fc;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    background: white;
+}
+
+/* IMAGE */
+.food-img {
+    width: 140px;   /* slightly reduced to avoid overflow */
+    height: 140px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex-shrink: 0; /* 🔥 prevents pushing layout */
+}
+
+/* SECTION CARDS */
+.card {
+    background: #f5f3ff;
+    padding: 14px;
+    border-radius: 16px;
+    margin-top: 12px;
+}
+
+/* SECTION TITLE */
+.card h3 {
+    font-size: 16px;  /* 🔥 increased */
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+/* INGREDIENTS */
+.ingredients li {
+    margin-bottom: 8px;
+    font-size: 15px;  /* 🔥 increased */
+}
+
+/* TIPS */
+.card p {
+    font-size: 15px;  /* 🔥 increased */
+    margin-bottom: 8px;
+}
+
+/* STEPS GRID */
+.steps {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+}
+
+/* STEP CARD */
+.step {
+    background: white;
+    padding: 12px;
+    border-radius: 12px;
+    font-size: 14px;  /* 🔥 increased */
+    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+</style>
+
+<div class="container">
+
+    <!-- TOP SECTION -->
+    <div class="top">
+
+        <div>
+            <div class="title">{{ recipe.name }}</div>
+
+            <!-- STATS -->
+            <div class="stats">
+                <div class="stat">
+                    <b>{{ recipe.calories|default:"--" }}</b>
+                    kcal
+                </div>
+                <div class="stat">
+                    <b>{{ recipe.protein|default:"--" }}</b>
+                    g
+                </div>
+            </div>
+        </div>
+
+        <!-- IMAGE -->
+        <img src="{{ recipe.image.url }}" class="food-img">
+
+    </div>
+
+    <!-- INGREDIENTS -->
+    <div class="card">
+        <h3>🥗 Ingredients</h3>
+
+        <ul class="ingredients">
+            {% for item in ingredients_list %}
+                <li>• {{ item }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+
+    <!-- TIPS -->
+    <div class="card">
+        <h3>💡 Tips</h3>
+
+        {% if recipe.tips %}
+            {% for tip in tips_list %}
+                <p>• {{ tip }}</p>
+            {% endfor %}
+        {% else %}
+            <p>Use fresh ingredients and adjust spices to your taste.</p>
+        {% endif %}
+    </div>
+
+    <!-- STEPS -->
+    <div class="card">
+        <h3>👨‍🍳 Steps</h3>
+
+        <div class="steps">
+            {% for step in steps_list %}
+                {% if step %}
+                    <div class="step">
+                        {{ forloop.counter }}. {{ step }}
+                    </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+</div>
+
+{% endblock %}

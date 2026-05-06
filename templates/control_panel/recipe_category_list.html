@@ -1,0 +1,221 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+
+/* 🔥 REMOVE NAVBAR */
+nav, .navbar, .bottom-nav, .top-nav, header {
+    display: none !important;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: linear-gradient(135deg,#e9d5ff,#c084fc);
+    font-family: 'Poppins', sans-serif;
+}
+
+/* WRAPPER */
+.wrapper {
+    max-width: 420px;
+    margin: auto;
+    padding: 16px;
+}
+
+/* HEADER */
+.header {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.sub-header {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 12px;
+}
+
+/* TOP BAR */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+/* ADD BUTTON */
+.add-btn {
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: linear-gradient(to right,#7c3aed,#a78bfa);
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+
+    transition: 0.2s;
+}
+
+.add-btn:hover {
+    transform: scale(1.03);
+}
+
+/* CARD */
+.card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(18px);
+    border-radius: 22px;
+    padding: 14px;
+
+    border: 1px solid rgba(124,58,237,0.15);
+
+    box-shadow:
+        0 10px 25px rgba(124,58,237,0.12);
+}
+
+/* CATEGORY ITEM */
+.category-item {
+    padding: 14px;
+    border-radius: 16px;
+    margin-bottom: 10px;
+
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(124,58,237,0.1);
+
+    transition: 0.2s;
+}
+
+.category-item:hover {
+    background: #ede9fe;
+    transform: translateY(-2px);
+}
+
+/* TOP */
+.category-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* NAME */
+.name {
+    font-size: 15px;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* ID BADGE */
+.id-badge {
+    background: #ede9fe;
+    color: #6d28d9;
+
+    padding: 5px 10px;
+    border-radius: 10px;
+
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* ACTIONS */
+.actions {
+    display: flex;
+    gap: 14px;
+    margin-top: 10px;
+    font-size: 12px;
+}
+
+.actions a {
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.edit {
+    color: #7c3aed;
+}
+
+.delete {
+    color: #dc2626;
+}
+
+/* EMPTY */
+.empty {
+    color: #6b7280;
+    text-align: center;
+    padding: 12px;
+    font-size: 13px;
+}
+
+</style>
+
+
+<div class="wrapper">
+
+    <!-- 🔥 HEADER -->
+    <div class="header">
+        Recipe Categories 🍲
+    </div>
+
+    <div class="sub-header">
+        Total Categories: {{ categories|length }}
+        &emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;
+        <a href="{% url 'admin_dashboard' %}" class="back"> 
+        ← Back
+        </a>
+    </div>
+
+    <!-- 🔥 TOP BAR -->
+    <div class="top-bar">
+        <a href="{% url 'add_recipe_category' %}" class="add-btn">
+            + Add Category
+        </a>
+    </div>
+
+    <!-- 🔥 CATEGORY LIST -->
+    <div class="card">
+
+        {% for c in categories %}
+
+        <div class="category-item">
+
+            <div class="category-top">
+
+                <div class="name">
+                    {{ c.name }}
+                </div>
+
+                <div class="id-badge">
+                    ID {{ c.id }}
+                </div>
+
+            </div>
+
+            <div class="actions">
+
+                <a href="{% url 'edit_recipe_category' c.id %}"
+                   class="edit">
+                   Edit
+                </a>
+
+                <a href="{% url 'delete_recipe_category' c.id %}"
+                   class="delete"
+                   onclick="return confirm('Delete this category?')">
+                   Delete
+                </a>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="empty">
+            No recipe categories found 🍲
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

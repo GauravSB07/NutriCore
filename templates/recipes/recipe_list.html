@@ -1,0 +1,570 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+
+body{
+    background:linear-gradient(135deg,#e9d5ff,#f5f3ff);
+    font-family:'Poppins',sans-serif;
+    margin:0;
+    padding:0 0 90px;
+}
+
+/* HEADER */
+.header{
+    text-align:center;
+    padding:18px 16px 12px;
+
+    font-size:24px;
+    font-weight:700;
+
+    color:#4c1d95;
+}
+
+/* SEARCH */
+.search-box{
+
+    margin:0 16px 14px;
+
+    background:white;
+
+    border-radius:18px;
+
+    padding:12px 16px;
+
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    box-shadow:
+        0 10px 25px rgba(139,92,246,0.08);
+}
+
+.search-box input{
+
+    width:100%;
+
+    border:none;
+    outline:none;
+
+    font-size:14px;
+
+    background:transparent;
+}
+
+/* FILTERS */
+.filters{
+
+    display:flex;
+    gap:10px;
+
+    overflow-x:auto;
+
+    padding:0 16px 10px;
+
+    scrollbar-width:none;
+}
+
+.filters::-webkit-scrollbar{
+    display:none;
+}
+
+.filter-chip{
+
+    flex-shrink:0;
+
+    padding:8px 14px;
+
+    border-radius:999px;
+
+    background:#ede9fe;
+
+    color:#6d28d9;
+
+    font-size:12px;
+    font-weight:600;
+
+    cursor:pointer;
+
+    transition:0.2s;
+}
+
+.filter-chip.active{
+
+    background:
+        linear-gradient(
+        to right,
+        #7c3aed,
+        #a78bfa);
+
+    color:white;
+}
+
+/* DROPDOWN */
+.dropdown-btn{
+
+    width:calc(100% - 32px);
+
+    margin:0 16px;
+
+    background:white;
+
+    border:none;
+
+    border-radius:16px;
+
+    padding:12px 16px;
+
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+
+    font-size:13px;
+    font-weight:600;
+
+    box-shadow:
+        0 8px 20px rgba(139,92,246,0.08);
+}
+
+.dropdown-box{
+
+    display:none;
+
+    flex-wrap:wrap;
+
+    gap:8px;
+
+    margin:12px 16px;
+}
+
+.dropdown-box.show{
+    display:flex;
+}
+
+/* RECIPE CARD */
+.recipe-card{
+
+    display:flex;
+    gap:12px;
+
+    margin:14px 16px;
+
+    background:rgba(255,255,255,0.92);
+
+    border-radius:22px;
+
+    padding:12px;
+
+    text-decoration:none;
+
+    color:inherit;
+
+    box-shadow:
+        0 12px 25px rgba(139,92,246,0.12);
+
+    transition:0.2s;
+}
+
+.recipe-card:hover{
+    transform:translateY(-2px);
+}
+
+/* IMAGE */
+.recipe-img{
+
+    width:82px;
+    height:82px;
+
+    border-radius:18px;
+
+    object-fit:cover;
+
+    flex-shrink:0;
+
+    background:#e5e7eb;
+}
+
+/* CONTENT */
+.recipe-content{
+    flex:1;
+}
+
+/* TITLE */
+.recipe-content h3{
+
+    margin:0;
+
+    font-size:15px;
+    font-weight:700;
+
+    color:#111827;
+}
+
+/* META */
+.recipe-meta{
+
+    font-size:12px;
+
+    color:#6b7280;
+
+    margin-top:4px;
+}
+
+/* STATS */
+.stats{
+
+    display:flex;
+    gap:8px;
+
+    margin-top:10px;
+
+    flex-wrap:wrap;
+}
+
+.stat-box{
+
+    background:#ede9fe;
+
+    color:#6d28d9;
+
+    padding:5px 10px;
+
+    border-radius:10px;
+
+    font-size:11px;
+    font-weight:600;
+}
+
+/* EMPTY */
+.empty{
+
+    text-align:center;
+
+    margin-top:40px;
+
+    color:#6b7280;
+
+    font-size:14px;
+}
+
+</style>
+
+
+<!-- HEADER -->
+<div class="header">
+    🍽️ Recipe Library
+</div>
+
+
+<!-- SEARCH -->
+<div class="search-box">
+
+    🔍
+
+    <input type="text"
+           id="searchInput"
+           placeholder="Search recipes...">
+
+</div>
+
+
+<!-- FILTERS -->
+<div class="filters">
+
+    <div class="filter-chip active"
+         onclick="applyFilter('')">
+
+         All
+
+    </div>
+
+    <div class="filter-chip"
+         onclick="applyFilter('high_protein')">
+
+         💪 Protein
+
+    </div>
+
+    <div class="filter-chip"
+         onclick="applyFilter('low_cal')">
+
+         🔥 Low Cal
+
+    </div>
+
+    <div class="filter-chip"
+         onclick="applyFilter('veg')">
+
+         🥗 Veg
+
+    </div>
+
+</div>
+
+
+<!-- CATEGORY -->
+<button type="button"
+        class="dropdown-btn"
+        onclick="toggleDropdown()">
+
+    Categories
+
+    <span id="arrow">▼</span>
+
+</button>
+
+
+<div id="categoryBox"
+     class="dropdown-box">
+
+    {% for c in categories %}
+
+        <div class="filter-chip"
+             onclick="applyCategory('{{ c.id }}')">
+
+            {{ c.name }}
+
+        </div>
+
+    {% endfor %}
+
+</div>
+
+
+<!-- RECIPES -->
+<div id="recipeContainer">
+
+{% for recipe in recipes %}
+
+<a href="{% url 'recipes:recipe_detail' recipe.id %}"
+   class="recipe-card">
+
+    {% if recipe.image %}
+
+        <img loading="lazy"
+             src="{{ recipe.image.url }}"
+             class="recipe-img">
+
+    {% else %}
+
+        <div class="recipe-img"></div>
+
+    {% endif %}
+
+    <div class="recipe-content">
+
+        <h3>
+            {{ recipe.name }}
+        </h3>
+
+        <div class="recipe-meta">
+
+            {{ recipe.category.name|default:"Uncategorized" }}
+
+        </div>
+
+        <div class="stats">
+
+            <div class="stat-box">
+
+                💪 {{ recipe.protein|floatformat:1 }}g
+
+            </div>
+
+            <div class="stat-box">
+
+                🔥 {{ recipe.calories|floatformat:0 }} kcal
+
+            </div>
+
+        </div>
+
+    </div>
+
+</a>
+
+{% empty %}
+
+<div class="empty">
+
+    No recipes found 🍽️
+
+</div>
+
+{% endfor %}
+
+</div>
+
+
+<script>
+
+const recipeBaseUrl =
+    "{% url 'recipes:recipe_detail' 0 %}"
+    .replace('0/', '');
+
+
+/* CATEGORY */
+function toggleDropdown(){
+
+    const box =
+        document.getElementById(
+            "categoryBox"
+        );
+
+    const arrow =
+        document.getElementById(
+            "arrow"
+        );
+
+    box.classList.toggle("show");
+
+    arrow.innerText =
+        box.classList.contains("show")
+        ? "▲"
+        : "▼";
+}
+
+
+/* AJAX */
+function fetchRecipes(params = {}) {
+
+    let url =
+        new URL(window.location.href);
+
+    url.search = "";
+
+    for (let key in params) {
+
+        url.searchParams.set(
+            key,
+            params[key]
+        );
+    }
+
+    fetch(url, {
+
+        headers:{
+            'X-Requested-With':
+            'XMLHttpRequest'
+        }
+
+    })
+
+    .then(res => res.json())
+
+    .then(data => {
+
+        let container =
+            document.getElementById(
+                "recipeContainer"
+            );
+
+        container.innerHTML = "";
+
+        if(data.recipes.length === 0){
+
+            container.innerHTML = `
+            <div class="empty">
+                No recipes found 🍽️
+            </div>
+            `;
+
+            return;
+        }
+
+        data.recipes.forEach(r => {
+
+            container.innerHTML += `
+
+            <a href="${recipeBaseUrl}${r.id}/"
+               class="recipe-card">
+
+                ${
+                    r.image
+                    ?
+                    `<img loading="lazy"
+                          src="${r.image}"
+                          class="recipe-img">`
+                    :
+                    `<div class="recipe-img"></div>`
+                }
+
+                <div class="recipe-content">
+
+                    <h3>${r.name}</h3>
+
+                    <div class="recipe-meta">
+
+                        ${r.category}
+
+                    </div>
+
+                    <div class="stats">
+
+                        <div class="stat-box">
+
+                            💪 ${r.protein}g
+
+                        </div>
+
+                        <div class="stat-box">
+
+                            🔥 ${r.calories} kcal
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </a>
+
+            `;
+        });
+    });
+}
+
+
+/* FILTER */
+function applyFilter(type){
+
+    fetchRecipes({
+        filter:type
+    });
+}
+
+
+/* CATEGORY */
+function applyCategory(id){
+
+    fetchRecipes({
+        category:id
+    });
+}
+
+
+/* SEARCH */
+let searchTimeout;
+
+document.getElementById("searchInput")
+.addEventListener("input", function(){
+
+    clearTimeout(searchTimeout);
+
+    let value = this.value;
+
+    searchTimeout = setTimeout(() => {
+
+        fetchRecipes({
+            search:value
+        });
+
+    }, 400);
+
+});
+
+</script>
+
+{% endblock %}

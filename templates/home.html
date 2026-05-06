@@ -1,0 +1,388 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+/* ✨ premium card */
+.premium-card {
+    background: rgba(255,255,255,0.9);
+    backdrop-filter: blur(12px);
+    border-radius: 18px;
+    padding: 14px;
+
+    box-shadow:
+        0 4px 10px rgba(0,0,0,0.05),
+        0 10px 25px rgba(0,0,0,0.08);
+
+    border: 1px solid rgba(255,255,255,0.6);
+
+    transition: all 0.25s ease;
+}
+
+.premium-card:hover {
+    transform: translateY(-2px) scale(1.01);
+    box-shadow:
+        0 6px 14px rgba(0,0,0,0.08),
+        0 14px 30px rgba(0,0,0,0.12);
+}
+
+/* ✨ gradient stat cards */
+.gradient-card {
+    border-radius: 20px;
+    padding: 16px;
+    color: white;
+
+    box-shadow:
+        0 8px 25px rgba(139,92,246,0.35),
+        inset 0 1px 1px rgba(255,255,255,0.3);
+
+    position: relative;
+    overflow: hidden;
+}
+
+.gradient-card::after {
+    content: "";
+    position: absolute;
+    top: -40%;
+    left: -40%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(255,255,255,0.25),
+        transparent
+    );
+    transform: rotate(25deg);
+}
+
+/* 🔵 progress ring */
+.progress-ring {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: conic-gradient(#8b5cf6 0deg, #ddd 0deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.progress-inner {
+    width: 70px;
+    height: 70px;
+    background: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+}
+
+/* 📊 mini bars */
+.bar {
+    width: 6px;
+    border-radius: 4px;
+    background: #8b5cf6;
+    opacity: 0.8;
+}
+
+.card-btn {
+    display: block;
+    padding: 14px;
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(10px);
+    border-radius: 16px;
+    text-align: center;
+    font-size: 14px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+
+
+}
+
+/* ===== FLOATING + BUTTON (FIXED PROPERLY) ===== */
+.fab-container {
+    position: absolute;
+    right: 18px;
+
+    /* 🔥 KEY FIX */
+    bottom: 115px;   /* pushes it clearly above navbar */
+
+    z-index: 50;
+}
+
+.fab-container a {
+    width: 60px;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 26px;
+    color: white;
+
+    border-radius: 50%;
+
+    background: linear-gradient(135deg,#7c3aed,#a78bfa);
+
+    box-shadow:
+        0 12px 25px rgba(124,58,237,0.4),
+        0 4px 10px rgba(0,0,0,0.1);
+
+    transition: 0.25s ease;
+}
+
+/* hover */
+.fab-container a:hover {
+    transform: scale(1.08);
+}
+
+</style>
+
+
+<div class="px-4 pt-4 pb-6">
+
+    <!-- 🔝 HEADER -->
+    <div class="flex justify-between items-center mb-5">
+        <div>
+            <h2 class="text-lg font-semibold text-gray-800">
+                Hello, {{ user.username }} &#x1F64B;
+            </h2>
+        </div>
+
+        <div>
+            <p class="text-gray-500">&#127775; {{ user.profile.points }} Points</p>
+        </div>
+
+    </div>
+
+
+    <!-- 🔥 MAIN STATS -->
+    <div class="grid grid-cols-2 gap-3 mb-5">
+
+        <div class="gradient-card"
+             style="background: linear-gradient(135deg,#ff7eb3,#8b5cf6);">
+            <p class="text-sm opacity-90">🔥 Calories</p>
+            <h2 class="text-2xl font-semibold">{{ total_calories|default:"0" }}</h2>
+            <p class="text-xs opacity-80">kcal</p>
+        </div>
+
+        <div class="gradient-card"
+             style="background: linear-gradient(135deg,#60a5fa,#8b5cf6);">
+            <p class="text-sm opacity-90">💧 Water</p>
+            <h2 class="text-2xl font-semibold">{{ total_water }}</h2>
+            <p class="text-xs opacity-80">ml</p>
+        </div>
+
+    </div>
+
+
+    <!-- 🧊 SMALL STATS -->
+    <div class="grid grid-cols-3 gap-3 mb-5">
+
+        <div class="premium-card text-center">
+            <p class="text-xs text-gray-500">Protein</p>
+            <h3 class="font-semibold text-lg">{{ total_protein|default:"0" }}</h3>
+            <p class="text-xs">grams</p>
+        </div>
+
+        <div class="premium-card text-center">
+            <p class="text-xs text-gray-500">Cheat Meal Count</p>
+            <h3 class="font-semibold text-lg">{{ cheat_count }}</h3>
+        </div>
+
+        <div class="premium-card text-center">
+            <p class="text-xs text-gray-500">Status</p>
+
+            {% if day_type == "Good (Fat Loss)" or day_type == "Good (Bulk)" %}
+                <p class="text-green-500 font-semibold text-xs">{{ day_type }}</p>
+            {% else %}
+                <p class="text-red-500 font-semibold text-sm">{{ day_type }}</p>
+            {% endif %}
+        </div>
+
+    </div>
+
+
+    <!-- 🍽️ NUTRITION -->
+    <h3 class="text font-semibold text-gray-600 mb-2">&#x1F957; Nutrition</h3>
+
+    <div class="grid grid-cols-2 gap-3 mb-5">
+
+        <a href="{% url 'nutrition:log_meal' %}" class="premium-card text-center"><p>&#x270E;Log Meal</p></a>
+        <a href="{% url 'nutrition:log_water' %}" class="premium-card text-center">🫗 Water Intake</a>
+        <a href="{% url 'nutrition:meal_list' %}" class="premium-card text-center"> <p>&#x1F374;Meals</p></a>
+        <a href="{% url 'nutrition:food_list' %}" class="premium-card text-center"><p>&#127861;Food Library</p></a>
+        <a href="{% url 'recipes:recipe_list' %}" class="premium-card text-center col-span-2">&#x1F373; Recipe Library</a>
+    </div>
+
+
+<!-- 💪 WORKOUT -->
+<h3 class="font-semibold text-gray-600 mb-2">&#x1F3CB; Workout</h3>
+
+<div class="grid grid-cols-2 gap-3 mb-5">
+
+    <!-- 🔥 WORKOUT LIBRARY (REPLACES ACTIVITY RING) -->
+    <a href="{% url 'workout_library' %}"
+       class="premium-card flex flex-col justify-between">
+
+        <div>
+            <h3 class="text-lg font-semibold mt-1">Workout Library</h3>
+        </div>
+
+        <div>
+            <img src="{% static 'images/workoutlib.png' %}" content="justify-center">
+        </div>
+
+    </a>
+
+
+    <!-- 🚶 STEPS CARD -->
+    <a href="{% url 'log_steps' %}"
+       class="premium-card flex flex-col justify-between">
+
+        <div class="flex justify-between items-start">
+
+            <div>
+                <p class="text text-gray-500">Steps</p>
+
+                <h2 class="text-2xl font-bold mt-1">
+                    {{ total_steps|default:"0" }}
+                </h2>
+            </div>
+
+            <div class="w-12 h-12 rounded-full bg-purple-100 text-purple-600 
+                        flex items-center justify-center text-lg font-semibold shadow-sm">
+                →
+            </div>
+
+        </div>
+
+        <!-- mini bars -->
+        <div class="mt-5 flex items-end justify-between gap-1 h-20">
+            <div class="w-2 bg-purple-300 rounded-full h-6"></div>
+            <div class="w-2 bg-purple-400 rounded-full h-10"></div>
+            <div class="w-2 bg-purple-500 rounded-full h-8"></div>
+            <div class="w-2 bg-purple-300 rounded-full h-12"></div>
+            <div class="w-2 bg-purple-400 rounded-full h-7"></div>
+            <div class="w-2 bg-purple-500 rounded-full h-14"></div>
+            <div class="w-2 bg-purple-300 rounded-full h-9"></div>
+            <div class="w-2 bg-purple-400 rounded-full h-16"></div>
+            <div class="w-2 bg-purple-500 rounded-full h-11"></div>
+        </div>
+
+    </a>
+
+    <!-- 📈 REPORTS -->
+    <a href="{% url 'workout_reports' %}" class="premium-card col-span-2">
+
+        <div class="bg-gradient-to-r from-purple-500 to-purple-500 rounded-xl px-4 py-3 flex items-center justify-between shadow-sm">
+
+            <!-- LEFT TEXT -->
+            <div>
+                <p class="text-sm font-semibold text-white">
+                    Muscle Reports
+                </p>
+                <p class="text-xs text-white/80">
+                    Track balance & strength
+                </p>
+            </div>
+
+            <!-- RIGHT ICON -->
+            <div class="w-9 h-9 bg-white/40 backdrop-blur rounded-full flex items-center justify-center text-white">
+                ->
+            </div>
+
+</div>
+
+    </a>
+    
+    <!---Progress-->
+    <a href="{% url 'workout_progress' %}"
+       class="premium-card flex flex-col justify-between">
+
+        <div class="flex justify-between items-start">
+
+            <div>
+                <p class="text-sm text-gray-500">Muscle Progress</p>
+
+            </div>
+
+        </div>
+
+        <!-- mini bars -->
+        <div>
+            <img src="{% static 'images/progressimage.png' %}" content="justify-center">
+        </div>
+
+    </a>
+
+    <!---Charts-->
+    <a href="{% url 'workout_charts' %}"
+       class="premium-card flex flex-col justify-between">
+
+        <div class="flex justify-between items-start">
+
+            <div>
+                <p class="text-sm text-gray-500">Workout Charts</p>
+
+            </div>
+
+        </div>
+
+        <!-- mini bars -->
+        <div>
+            <img src="{% static 'images/workoutcharts.png' %}" content="justify-center">
+        </div>
+
+    </a>
+
+</div>
+
+
+    <!-- 📊 REPORTS -->
+    <h3 class="font-semibold text-gray-600 mb-2">&#x1F4DD;Reports</h3>
+
+    <div class="premium-card flex justify-around text-sm">
+
+        <a href="{% url 'daily_report' %}" class="px-3 py-1 rounded-full bg-purple-500 text-white shadow">
+            Daily
+        </a>
+
+        <a href="{% url 'weekly_report' %}" class="px-3 py-1 text-gray-500">
+            Weekly
+        </a>
+
+        <a href="{% url 'monthly_report' %}" class="px-3 py-1 text-gray-500">
+            Monthly
+        </a>
+
+    </div>
+
+        <div class="fab-container">
+            <a href="{% url 'nutrition:log_meal' %}"
+               class="w-14 h-14 flex items-center justify-center
+                      bg-gradient-to-r from-purple-500 to-purple-600
+                      text-white text-2xl rounded-full shadow-lg
+                      transition transform hover:scale-110 active:scale-95">
+                +
+            </a>
+        </div>
+
+</div>
+
+
+<script>
+// 🔥 animate progress ring
+const percent = 70;
+const ring = document.getElementById("ring");
+const text = document.getElementById("progressText");
+
+const degree = percent * 3.6;
+
+ring.style.background = `conic-gradient(#8b5cf6 ${degree}deg, #e5e7eb ${degree}deg)`;
+text.innerText = percent + "%";
+</script>
+
+{% endblock %}

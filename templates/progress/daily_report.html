@@ -1,0 +1,187 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="px-4 pt-4 pb-8 space-y-5">
+
+<div class="flex justify-center items-center mb-4">
+    
+    <div class="flex items-center gap-2">
+        <h2 class="text-xl font-semibold">
+            Daily Report
+        </h2>
+
+        <svg xmlns="http://www.w3.org/2000/svg"
+             height="28"
+             viewBox="0 -960 960 960"
+             width="28"
+             fill="#EA33F7">
+            <path d="m296-329.33 122-122 80 80L646.67-519v72.33h66.66v-186.66H526.67v66.66H599l-101 101-80-80L249.33-376 296-329.33ZM186.67-120q-27 0-46.84-19.83Q120-159.67 120-186.67v-586.66q0-27 19.83-46.84Q159.67-840 186.67-840h586.66q27 0 46.84 19.83Q840-800.33 840-773.33v586.66q0 27-19.83 46.84Q800.33-120 773.33-120H186.67Zm0-66.67h586.66v-586.66H186.67v586.66Z"/>
+        </svg>
+    </div>
+
+    </div>
+
+    <!-- GRID -->
+    <div class="grid grid-cols-2 gap-4">
+
+        <!-- 🔥 CALORIES (WAVE) -->
+        <div class="bg-white rounded-2xl p-4 shadow">
+            <p class="text-sm text-gray-500">Calories</p>
+            <h2 class="text-2xl font-bold">
+                {{ total_calories|floatformat:1 }}
+            </h2>
+            <p class="text-xs text-gray-400">kcal</p>
+
+            <canvas id="calChart" class="mt-3 h-16"></canvas>
+        </div>
+
+        <!-- 💪 PROTEIN (WAVE) -->
+        <div class="bg-white rounded-2xl p-4 shadow">
+            <p class="text-sm text-gray-500">Protein</p>
+            <h2 class="text-2xl font-bold">
+                {{ total_protein|floatformat:2 }}
+            </h2>
+            <p class="text-xs text-gray-400">g</p>
+
+            <canvas id="proteinChart" class="mt-3 h-16"></canvas>
+        </div>
+
+        <!-- 🔥 CALORIES LEFT (RING) -->
+        <div class="bg-white rounded-2xl p-4 shadow text-center">
+            <p class="text-sm text-gray-500">Calories Left</p>
+            <h2 class="text-xl font-bold">{{ calories_left|floatformat:1 }}</h2>
+
+            <div class="mt-3">
+                <canvas id="calRing" width="80" height="80"></canvas>
+            </div>
+        </div>
+
+        <!-- 💪 PROTEIN LEFT (RING) -->
+        <div class="bg-white rounded-2xl p-4 shadow text-center">
+            <p class="text-sm text-gray-500">Protein Left</p>
+            <h2 class="text-xl font-bold">{{ protein_left|floatformat:2 }}</h2>
+
+            <div class="mt-3">
+                <canvas id="proteinRing" width="80" height="80"></canvas>
+            </div>
+        </div>
+
+        <!-- 🚶 STEPS (BARS) -->
+        <div class="bg-white rounded-2xl p-4 shadow">
+
+            <p class="text-sm text-gray-500">Steps</p>
+
+            <h2 class="text-2xl font-bold">
+                {{ steps|default:"0" }}
+            </h2>
+
+            <p class="text-xs text-gray-400">
+                {{ steps_left }} left
+            </p>
+
+            <!-- progress bar -->
+            <div class="mt-2 w-full bg-gray-200 h-2 rounded-full">
+                <div class="bg-gradient-to-r from-purple-400 to-purple-600 h-2 rounded-full"
+                    style="width: {{ steps_percent }}%">
+                </div>
+            </div>
+
+            <!-- chart -->
+            <canvas id="stepsChart" class="mt-3 h-16"></canvas>
+
+        </div>
+
+        <!-- ❤️ STATUS -->
+        <div class="bg-white rounded-2xl p-4 shadow flex flex-col justify-between">
+            <div>
+                <p class="text-sm text-gray-500">Status</p>
+                <h2 class="text-lg font-bold">{{ day_type }}</h2>
+            </div>
+
+            <div class="flex justify-end">
+                <div class="w-12 h-12 bg-purple-500 text-white rounded-full flex items-center justify-center">
+                    ⭐
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- 🔥 CHART.JS -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+
+// 🔥 WAVE CHART FUNCTION
+function createWaveChart(id) {
+    new Chart(document.getElementById(id), {
+        type: 'line',
+        data: {
+            labels: [1,2,3,4,5,6,7],
+            datasets: [{
+                data: [5,8,6,9,7,10,8],
+                borderColor: '#8b5cf6',
+                backgroundColor: 'rgba(139,92,246,0.2)',
+                tension: 0.4,
+                fill: true,
+                pointRadius: 0
+            }]
+        },
+        options: {
+            plugins: { legend: { display:false }},
+            scales: { x:{display:false}, y:{display:false} }
+        }
+    });
+}
+
+// 🔥 BAR CHART
+new Chart(document.getElementById("stepsChart"), {
+    type: 'bar',
+    data: {
+        labels: [1,2,3,4,5,6],
+        datasets: [{
+            data: [3,6,4,8,5,9],
+            backgroundColor: '#8b5cf6',
+            borderRadius: 6
+        }]
+    },
+    options: {
+        plugins: { legend: { display:false }},
+        scales: { x:{display:false}, y:{display:false} }
+    }
+});
+
+// 🔥 RING FUNCTION
+function createRing(canvasId, percent){
+    const ctx = document.getElementById(canvasId).getContext('2d');
+
+    new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+            datasets: [{
+                data: [percent, 100-percent],
+                backgroundColor: ['#8b5cf6','#eee'],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            cutout: '70%',
+            plugins: { legend: { display:false }},
+        }
+    });
+}
+
+// INIT
+createWaveChart("calChart");
+createWaveChart("proteinChart");
+
+createRing("calRing", 60);
+createRing("proteinRing", 50);
+
+</script>
+
+{% endblock %}

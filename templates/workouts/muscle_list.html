@@ -1,0 +1,161 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg,#c4b5fd,#7c3aed);
+}
+
+/* MAIN CONTAINER */
+.container {
+    max-width: 420px;
+    margin: auto;
+    background: #f3f4f6;
+    border-radius: 30px;
+    padding: 16px;
+    min-height: 100vh;
+}
+
+/* HERO */
+.hero {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* TEXT */
+.hero-text h1 {
+    font-size: 30px;
+    font-weight: 800;
+    margin: 0;
+    color: #111827;
+}
+
+/* IMAGE CONTAINER */
+.hero-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* HERO IMAGE */
+.hero-img img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+
+    border-radius: 14px;
+    padding: 6px;
+    background: rgba(255,255,255,0.6);
+
+    /* subtle shadow */
+    box-shadow: 0 8px 18px rgba(0,0,0,0.08);
+}
+
+/* CARD */
+.workout-card {
+    margin-top: 16px;
+    height: 110px;
+    border-radius: 22px;
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    text-decoration: none;
+    color: white;
+    transition: 0.25s ease;
+}
+
+/* HOVER */
+.workout-card:hover {
+    transform: translateY(-3px) scale(1.01);
+}
+
+/* IMAGE */
+.card-img {
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 65%;
+    object-fit: cover;
+
+    /* smoother blending */
+    filter: brightness(0.9) contrast(1.05);
+}
+
+/* GRADIENT OVERLAY */
+.overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+        to right,
+        rgba(109,40,217,0.95) 0%,
+        rgba(167,139,250,0.85) 40%,
+        rgba(255,255,255,0) 100%
+    );
+}
+
+/* TEXT */
+.card-content {
+    position: relative;
+    z-index: 2;
+}
+
+.card-content h3 {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    letter-spacing: 0.5px;
+}
+
+/* OPTIONAL: subtle press effect */
+.workout-card:active {
+    transform: scale(0.98);
+}
+</style>
+
+<div class="container">
+
+    <!-- HERO -->
+    <div class="hero">
+
+        <!-- TEXT -->
+        <div class="hero-text">
+            <h1>WORKOUT LIBRARY</h1>
+        </div>
+
+        <!-- IMAGE -->
+        <div class="hero-img">
+            <img src="{% static 'images/workoutlibrary.png' %}" alt="Workout">
+        </div>
+
+    </div>
+
+    <!-- CARDS -->
+    {% for m in muscles %}
+    <a href="{% url 'sub_muscle_list' m.id %}" class="workout-card">
+
+        <!-- IMAGE -->
+        <img src="{% if m.image %}{{ m.image.url }}{% else %}{% static 'images/default.jpg' %}{% endif %}" 
+             class="card-img">
+
+        <!-- OVERLAY -->
+        <div class="overlay"></div>
+
+        <!-- TEXT -->
+        <div class="card-content">
+            <h3>{{ m.name|upper }}</h3>
+        </div>
+
+    </a>
+    {% endfor %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,272 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+/* ===== HEADER ===== */
+.page-header {
+    margin-top: 8px;
+}
+
+.page-header h2 {
+    font-size: 20px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.page-header p {
+    font-size: 13px;
+    color: #6b7280;
+    margin-top: 2px;
+}
+
+/* ===== GREETING ===== */
+.greeting {
+    font-size: 15px;
+    font-weight: 600;
+    color: #374151;
+}
+
+
+/* ===== CARD (FIXED) ===== */
+.card {
+    background: #f5f3ff; /* soft lavender */
+    border-radius: 20px;
+    padding: 16px;
+
+    border: 1.5px solid rgba(124,58,237,0.18);
+    box-shadow: 0 6px 18px rgba(124,58,237,0.06);
+
+    transition: 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(124,58,237,0.35);
+}
+
+
+/* ===== PROGRESS ===== */
+.progress {
+    height: 8px;
+    background: #ede9fe;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(to right,#7c3aed,#a78bfa);
+}
+
+
+/* ===== STREAK RING ===== */
+circle {
+    transition: stroke-dashoffset 0.6s ease;
+}
+
+
+/* ===== TEXT STYLING ===== */
+.small-text {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.highlight {
+    color: #7c3aed;
+    font-weight: 600;
+}
+
+
+/* ===== MOTIVATION IMAGE ===== */
+.motivation-img {
+    width: 75px;
+    height: 75px;
+    object-fit: contain;
+}
+
+
+/* ===== CHART ===== */
+canvas {
+    background: transparent;
+}
+
+
+/* ===== SECTION TITLE ===== */
+.section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4c1d95;
+}
+
+
+/* ===== CHIP ===== */
+.chip {
+    font-size: 12px;
+    background: #ede9fe;
+    color: #4c1d95;
+    padding: 5px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(124,58,237,0.2);
+}
+
+</style>
+
+
+<div class="px-4 pb-6 space-y-5">
+
+    <!-- 🔝 HEADER -->
+    <div class="flex justify-between items-center">
+
+        <div class="page-header">
+            <h2>Weekly Report &#x21D1;</h2>
+            <p>Your weekly fitness overview</p>
+        </div>
+
+    </div>
+
+    <!-- 👋 GREETING -->
+    <h3 class="greeting">
+        Hello, {{ user.username }} 👋
+    </h3>
+
+    <!-- 📊 PROGRESS -->
+    <div class="card flex justify-between items-center">
+
+        <div class="flex-1 pr-4">
+
+            <p class="text-sm font-medium">
+                Progress:
+                <span class="text-purple-600 font-semibold">
+                    {{ progress_percent|floatformat:0 }}%
+                </span>
+            </p>
+
+            <p class="text-xs text-gray-500 mt-1">
+                Keep it up! You're doing great.
+            </p>
+
+            <div class="progress mt-3">
+                <div class="progress-bar"
+                     style="width: {{ progress_percent }}%">
+                </div>
+            </div>
+
+            <div class="text-xs text-purple-600 mt-1">
+                {{ progress_percent|floatformat:0 }}%
+            </div>
+
+        </div>
+
+        <!-- 🔥 STREAK -->
+<div class="relative w-24 h-24">
+
+    <svg class="w-24 h-24 -rotate-90">
+
+        <!-- background -->
+        <circle
+            cx="48" cy="48" r="40"
+            stroke="#ede9fe"
+            stroke-width="6"
+            fill="none"
+        />
+
+        <!-- progress -->
+        <circle
+            cx="48" cy="48" r="40"
+            stroke="#7c3aed"
+            stroke-width="6"
+            fill="none"
+            stroke-linecap="round"
+            stroke-dasharray="251"
+            stroke-dashoffset="{{ ring_offset }}"
+        />
+
+    </svg>
+
+    <!-- center text -->
+    <div class="absolute inset-0 flex flex-col items-center justify-center text-sm font-semibold text-purple-700">
+        🔥
+        <div>{{ streak }}</div>
+        <small>Days</small>
+    </div>
+
+</div>
+
+    </div>
+
+    <!-- 💬 MOTIVATION CARD -->
+    <div class="card flex items-center justify-between">
+
+        <div>
+            <p class="font-semibold">You’ve got this! 💪</p>
+            <p class="text-sm text-gray-500 mt-1">
+                Small steps every day lead to big changes.
+            </p>
+        </div>
+
+        <img src="{% static 'images/weeklyreport.png' %}"
+             class="w-20 h-20 object-cover rounded-lg">
+    </div>
+
+    <!-- 📊 CHART -->
+    <div class="card">
+
+        <div class="flex justify-between items-center mb-2">
+            <h3 class="font-semibold text-sm">Fitness Activity (7 Days)</h3>
+
+            <div class="chip">
+                7 Days
+            </div>
+        </div>
+
+        <canvas id="barChart"></canvas>
+
+    </div>
+
+</div>
+
+
+<!-- DATA -->
+{{ labels|json_script:"labels-data" }}
+{{ calories|json_script:"calories-data" }}
+{{ protein|json_script:"protein-data" }}
+
+<script>
+const labels = JSON.parse(document.getElementById('labels-data').textContent);
+const calories = JSON.parse(document.getElementById('calories-data').textContent);
+const protein = JSON.parse(document.getElementById('protein-data').textContent);
+
+new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Calories',
+                data: calories,
+                backgroundColor: '#7c3aed'
+            },
+            {
+                label: 'Protein',
+                data: protein,
+                backgroundColor: '#60a5fa'
+            }
+        ]
+    },
+    options: {
+        plugins: {
+            legend: {
+                labels: {
+                    color: '#4c1d95'
+                }
+            }
+        }
+    }
+});
+</script>
+
+{% endblock %}

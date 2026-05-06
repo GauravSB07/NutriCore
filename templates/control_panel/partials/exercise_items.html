@@ -1,0 +1,42 @@
+{% for e in exercises %}
+
+<div class="exercise-item">
+
+    <div class="exercise-top">
+
+        <div class="exercise-name">
+            {{ e.name }}
+        </div>
+
+    </div>
+
+    <div class="sub-muscle">
+        💪 {{ e.sub_muscle }}
+    </div>
+
+    <div class="actions">
+
+        <a href="{% url 'edit_exercise' e.id %}"
+           class="edit">
+           Edit
+        </a>
+
+        <a href="{% url 'delete_exercise' e.id %}"
+           class="delete"
+           onclick="return confirm('Delete this exercise?')">
+
+           Delete
+
+        </a>
+
+    </div>
+
+</div>
+
+{% empty %}
+
+<div class="empty">
+    No exercises found 🏋️
+</div>
+
+{% endfor %}

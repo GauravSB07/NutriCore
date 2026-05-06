@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+/* 🌊 WAVE */
+.wave {
+    position: absolute;
+    width: 200%;
+    height: 200%;
+    top: 100%;
+    left: -50%;
+    background: linear-gradient(180deg, #60a5fa, #2563eb);
+    border-radius: 40%;
+    animation: waveMove 6s infinite linear;
+}
+
+.wave2 {
+    animation-duration: 8s;
+    opacity: 0.5;
+}
+
+@keyframes waveMove {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+</style>
+
+
+<div class="px-4 pt-4 pb-6 space-y-5">
+
+    <div class="relative rounded-3xl p-5 overflow-hidden 
+                bg-gradient-to-br from-blue-400 to-blue-600 
+                text-white shadow-lg flex justify-between items-center">
+
+        <!-- LEFT TEXT -->
+        <div>
+            <h2 class="text-xl font-semibold">💧 Stay Hydrated</h2>
+            <p class="text-sm opacity-90">Track your water intake</p>
+
+            <div class="flex gap-6 mt-4 text-sm">
+                <div>
+                    <p class="opacity-80">Goal</p>
+                    <h3 class="text-lg font-bold">{{ goal }} ml</h3>
+                </div>
+                <div>
+                    <p class="opacity-80">Completed</p>
+                    <h3 class="text-lg font-bold">{{ total_water }} ml</h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- RIGHT IMAGE -->
+        <div class="relative w-28 h-28 flex-shrink-0">
+            <img src="{% static 'images/Water_img.jpg' %}"
+                class="w-full h-full object-cover rounded-2xl opacity-90">
+
+            <!-- BLEND OVERLAY -->
+            <div class="absolute inset-0 bg-gradient-to-l from-transparent to-blue-500 opacity-50 rounded-2xl"></div>
+        </div>
+
+    </div>
+
+
+    <!-- 🌊 PROGRESS CARD -->
+    <div class="bg-blue-50/70 backdrop-blur rounded-2xl p-4 shadow-sm flex items-center gap-4 border border-blue-100">
+
+        <!-- WAVE CIRCLE -->
+        <div class="relative w-24 h-24 rounded-full overflow-hidden border-4 border-blue-300">
+
+            <div class="wave" id="wave1"></div>
+            <div class="wave wave2" id="wave2"></div>
+
+            <div class="absolute inset-0 flex items-center justify-center font-bold text-blue-700">
+                {{ progress_percent|floatformat:0 }}%
+            </div>
+
+        </div>
+
+        <!-- BAR -->
+        <div class="flex-1">
+            <p class="text-sm text-gray-700">
+                <span class="text-blue-600 font-semibold">
+                    {{ total_water }} ml
+                </span> / {{ goal }} ml
+            </p>
+
+            <div class="w-full bg-blue-100 h-2 rounded-full mt-2">
+                <div class="bg-blue-500 h-2 rounded-full"
+                     style="width: {{ progress_percent }}%"></div>
+            </div>
+
+            <p class="text-xs text-blue-500 mt-1">
+                {{ progress_percent|floatformat:1 }}%
+            </p>
+        </div>
+
+    </div>
+
+
+    <!-- ⚡ QUICK ADD -->
+    <div class="bg-blue-50/60 backdrop-blur rounded-2xl p-4 shadow-sm border border-blue-100">
+
+        <h3 class="text-sm font-semibold text-blue-800 mb-3">Quick Add</h3>
+
+        <form method="post" class="flex gap-4 overflow-x-auto no-scrollbar">
+            {% csrf_token %}
+
+            <button name="amount" value="100">
+                <div class="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center text-red-500 text-xl">🥤</div>
+                <p class="text-xs mt-1">100ml</p>
+            </button>
+
+            <button name="amount" value="200">
+                <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 text-xl">🧋</div>
+                <p class="text-xs mt-1">200ml</p>
+            </button>
+
+            <button name="amount" value="300">
+                <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center text-green-600 text-xl">🥛</div>
+                <p class="text-xs mt-1">300ml</p>
+            </button>
+
+            <button name="amount" value="500">
+                <div class="w-12 h-12 rounded-full bg-blue-200 flex items-center justify-center">
+                    🧃
+                </div>
+                <p class="text-xs mt-1">500ml</p>
+
+            <!-- 🔥 WATER BOTTLE -->
+            <button name="amount" value="1000" class="text-center">
+                <div class="w-12 h-12 rounded-full bg-blue-200 flex items-center justify-center shadow-inner">
+                    <img src="{% static 'images/bottle_img.jpg' %}" class="w-6">
+                </div>
+                <p class="text-xs mt-1 text-blue-700">1L</p>
+            </button>
+
+        </form>
+    </div>
+
+
+    <!-- ✏️ CUSTOM INPUT -->
+    <div class="bg-blue-50/60 backdrop-blur rounded-2xl p-4 shadow-sm space-y-3 border border-blue-100">
+
+        <h3 class="text-sm font-semibold text-blue-800">Add Custom Amount</h3>
+
+        <form method="post" class="flex gap-2">
+            {% csrf_token %}
+
+            <input type="number" name="amount"
+                placeholder="Enter ml (e.g. 300)"
+                class="flex-1 px-3 py-2 rounded-xl bg-white border border-blue-200 focus:ring-2 focus:ring-blue-400">
+
+            <button class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 rounded-xl shadow">
+                Add
+            </button>
+        </form>
+
+    </div>
+
+</div>
+
+
+<script>
+const percent = {{ progress_percent|default:0 }};
+const level = 100 - percent;
+
+document.getElementById("wave1").style.top = level + "%";
+document.getElementById("wave2").style.top = level + "%";
+
+window.addEventListener("DOMContentLoaded", () => {
+    const params = new URLSearchParams(window.location.search);
+    const added = params.get("added");
+
+    if (added) {
+        showToast(`💧 +${added} ml added`);
+    }
+});
+
+</script>
+
+{% endblock %}

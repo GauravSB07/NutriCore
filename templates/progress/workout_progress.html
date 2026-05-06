@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+/* ===== HEADER ===== */
+.header-wrapper {
+    margin-top: 10px;
+}
+
+/* main row */
+.header-main {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* text */
+.header-main h1 {
+    margin: 0;
+    font-size: 22px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.header-main p {
+    margin-top: 4px;
+    font-size: 13px;
+    color: #6b7280;
+}
+
+/* image */
+.header-img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+}
+
+/* divider (important for "header feel") */
+.header-divider {
+    margin-top: 14px;
+    height: 2px;
+    width: 100%;
+    border-radius: 10px;
+
+    background: linear-gradient(
+        to right,
+        rgba(124,58,237,0.6),
+        rgba(167,139,250,0.2)
+    );
+}
+
+
+/* ===== CARDS ===== */
+.card {
+    background: #f5f3ff;
+    border-radius: 18px;
+    padding: 16px;
+
+    border: 1.5px solid rgba(124,58,237,0.18);
+    box-shadow: 0 6px 18px rgba(124,58,237,0.06);
+
+    transition: 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(124,58,237,0.35);
+}
+
+
+/* ===== EXERCISE ROW ===== */
+.exercise {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+
+/* ===== BADGES ===== */
+.badge-good {
+    background: #ecfdf5;
+    color: #16a34a;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.badge-bad {
+    background: #fef2f2;
+    color: #dc2626;
+    padding: 6px 12px;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+
+/* ===== DATE ===== */
+.date {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+
+/* ===== SECTION TITLE ===== */
+.section-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4c1d95;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+</style>
+
+
+<div class="px-4 pb-6 space-y-6">
+
+    <div class="header-wrapper">
+
+        <div class="header-main">
+            <div>
+                <h1>Workout Progress 💪</h1>
+                <p>Track your strength and improve every day</p>
+            </div>
+
+            <img src="{% static 'images/workout_progress.png' %}" class="header-img">
+        </div>
+
+        <div class="header-divider"></div>
+
+    </div>
+
+
+    {% for muscle, exercises in data.items %}
+
+        <!-- 🔥 MUSCLE TITLE -->
+        <div class="flex items-center gap-2 mt-4">
+            <span class="text-purple-500 ">🏋️</span>
+            <h3 class="font-semibold text-gray-800">{{ muscle }}</h3>
+        </div>
+
+
+        {% for ex in exercises %}
+
+            <!-- 🔥 EXERCISE CARD -->
+            <div class="card">
+
+                <div class="exercise">
+
+                    <!-- LEFT -->
+                    <div>
+
+                        <h4 class="font-semibold text-sm mb-2">
+                            {{ ex.name }}
+                        </h4>
+
+                        {% for r in ex.records %}
+                            <div class="date">
+                                • {{ r.date }} → {{ r.weight }} kg
+                            </div>
+                        {% endfor %}
+
+                    </div>
+
+                    <!-- RIGHT STATUS -->
+                    <div>
+
+                        {% if ex.improved %}
+                            <div class="badge-good">
+                                ✔ Progressive Overload
+                            </div>
+                        {% else %}
+                            <div class="badge-bad">
+                                ⚠ No Progress
+                            </div>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        {% endfor %}
+
+    {% empty %}
+        <p class="text-gray-500 text-sm">No workout data yet</p>
+    {% endfor %}
+
+
+    <!-- 💬 MOTIVATION -->
+    <div class="card flex justify-between items-center">
+
+        <div>
+            <p class="font-semibold">Keep it up!</p>
+            <p class="text-sm text-gray-500">
+                Consistency and progressive overload lead to real results.
+            </p>
+        </div>
+
+        <img src="{% static 'images/workoutprogress.png' %}"
+             class="w-20 h-20 rounded-lg object-cover">
+    </div>
+
+</div>
+
+{% endblock %}

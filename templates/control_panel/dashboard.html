@@ -1,0 +1,222 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+
+/* 🔥 REMOVE NAVBAR */
+nav,
+.navbar,
+.bottom-nav,
+.top-nav,
+header {
+    display: none !important;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: linear-gradient(135deg,#e9d5ff,#c084fc);
+    font-family: 'Poppins', sans-serif;
+}
+
+/* PAGE */
+.admin-page {
+    max-width: 420px;
+    margin: auto;
+    padding: 18px;
+}
+
+/* HEADER */
+.admin-header {
+    font-size: 26px;
+    font-weight: 800;
+    margin-bottom: 18px;
+    color: #111827;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+/* PANEL (GLASS LOOK) */
+.admin-panel {
+    background: rgba(255,255,255,0.7);
+    backdrop-filter: blur(18px);
+    border-radius: 24px;
+    padding: 12px;
+
+    border: 1px solid rgba(124,58,237,0.15);
+    box-shadow: 0 12px 30px rgba(124,58,237,0.15);
+}
+
+/* SECTION TITLE */
+.section-title {
+    font-size: 11px;
+    color: #6b7280;
+    margin-top: 18px;
+    margin-bottom: 8px;
+    font-weight: 600;
+    letter-spacing: 1px;
+}
+
+/* ITEM */
+.admin-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    padding: 14px 14px;
+    border-radius: 16px;
+
+    color: #111827;
+    text-decoration: none;
+    font-size: 14px;
+    font-weight: 500;
+
+    background: rgba(255,255,255,0.6);
+    backdrop-filter: blur(10px);
+
+    border: 1px solid rgba(124,58,237,0.12);
+
+    transition: all 0.25s ease;
+    margin-bottom: 6px;
+}
+
+/* HOVER */
+.admin-item:hover {
+    background: linear-gradient(135deg,#ede9fe,#ddd6fe);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(124,58,237,0.15);
+}
+
+/* ACTIVE */
+.admin-item.active {
+    background: linear-gradient(135deg,#c4b5fd,#a78bfa);
+    color: white;
+    font-weight: 600;
+}
+
+/* ICON + TEXT */
+.item-left {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* ICON STYLE */
+.icon {
+    font-size: 16px;
+}
+
+/* ARROW */
+.arrow {
+    color: #6b7280;
+    font-size: 14px;
+}
+
+/* ACTIVE ARROW */
+.admin-item.active .arrow {
+    color: white;
+}
+
+</style>
+
+
+<div class="admin-page">
+
+    <!-- HEADER -->
+    <div class="admin-header">
+        Admin Dashboard ⚙️
+    </div>
+
+    <div class="admin-panel">
+
+        <!-- USERS -->
+        <div class="section-title">USERS</div>
+
+        <a href="{% url 'user_list' %}" class="admin-item">
+            <div class="item-left">
+                <span class="icon">👤</span> Users
+            </div>
+            <span class="arrow">→</span>
+        </a>
+
+        <a href="{% url 'profile_list' %}" class="admin-item">
+            <div class="item-left">
+                <span class="icon">🪪</span> Profiles
+            </div>
+            <span class="arrow">→</span>
+        </a>
+
+
+        <!-- NUTRITION -->
+        <div class="section-title">NUTRITION</div>
+
+        <a href="{% url 'category_list' %}" class="admin-item">
+            <div class="item-left">
+                <span class="icon">📂</span> Categories
+            </div>
+            <span class="arrow">→</span>
+        </a>
+
+        <a href="{% url 'food_list' %}" class="admin-item">
+            <div class="item-left">
+                <span class="icon">🍽</span> Foods
+            </div>
+            <span class="arrow">→</span>
+        </a>
+
+        <a href="{% url 'meal_log_list' %}" class="admin-item">
+            <div class="item-left">
+                <span class="icon">🥘</span> Meal Logs
+            </div>
+            <span class="arrow">→</span>
+        </a>
+
+
+        <!-- RECIPES -->
+        <div class="section-title">RECIPES</div>
+
+        <a href="{% url 'recipe_category_list' %}" class="admin-item">
+            <div class="item-left">
+                <span class="icon">📁</span> Recipe Categories
+            </div>
+            <span class="arrow">→</span>
+        </a>
+
+        <a href="{% url 'recipe_list' %}" class="admin-item">
+            <div class="item-left">
+                <span class="icon">📖</span> Recipes
+            </div>
+            <span class="arrow">→</span>
+        </a>
+
+
+        <!-- WORKOUTS -->
+        <div class="section-title">WORKOUTS</div>
+
+        <a href="{% url 'exercise_list' %}" class="admin-item">
+            <div class="item-left">
+                <span class="icon">🏋️</span> Exercises
+            </div>
+            <span class="arrow">→</span>
+        </a>
+
+        <a href="{% url 'muscle_group_list' %}" class="admin-item">
+            <div class="item-left">
+                <span class="icon">💪</span> Muscle Groups
+            </div>
+            <span class="arrow">→</span>
+        </a>
+
+        <a href="{% url 'sub_muscle_list' %}" class="admin-item">
+            <div class="item-left">
+                <span class="icon">🧬</span> Sub Muscles
+            </div>
+            <span class="arrow">→</span>
+        </a>
+
+    </div>
+
+</div>
+
+{% endblock %}

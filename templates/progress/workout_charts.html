@@ -1,0 +1,349 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+/* BASE CARD */
+.card {
+    background: #f5f3ff; /* soft lavender */
+    border-radius: 20px;
+    padding: 16px;
+
+    /* 🔥 visible soft border */
+    border: 1.5px solid rgba(124,58,237,0.18);
+
+    /* subtle purple shadow */
+    box-shadow: 0 6px 18px rgba(124,58,237,0.06);
+
+    transition: 0.25s ease;
+}
+
+/* hover polish */
+.card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(124,58,237,0.35);
+}
+
+
+/* PAGE TITLE */
+.title {
+    font-size: 20px;
+    font-weight: 700;
+    color: #111827;
+}
+
+/* SUBTEXT */
+.subtitle {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+
+/* WEEK NAV BUTTON */
+.pill {
+    background: #ede9fe;
+    padding: 6px 14px;
+    border-radius: 12px;
+    font-size: 12px;
+    border: 1px solid rgba(124,58,237,0.15);
+    transition: 0.2s;
+}
+
+.pill:hover {
+    background: #ddd6fe;
+}
+
+
+/* SECTION HEADINGS */
+h3 {
+    font-size: 14px;
+    font-weight: 600;
+    color: #4c1d95;
+}
+
+
+/* DROPDOWN BUTTON */
+#dropdownBtn {
+    background: #ede9fe;
+    border: 1.5px solid rgba(124,58,237,0.18);
+    border-radius: 14px;
+    padding: 10px 14px;
+
+    font-size: 13px;
+    color: #4c1d95;
+
+    box-shadow: 0 4px 12px rgba(124,58,237,0.08);
+}
+
+/* DROPDOWN MENU */
+#dropdownMenu {
+    background: #f5f3ff;
+    border: 1.5px solid rgba(124,58,237,0.2);
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+/* DROPDOWN ITEM */
+.dropdown-item {
+    transition: 0.2s;
+    color: #374151;
+}
+
+.dropdown-item:hover {
+    background: #ede9fe;
+    color: #4c1d95;
+}
+
+
+/* CANVAS */
+canvas {
+    background: transparent;
+}
+
+
+/* HEADER IMAGE FIX */
+.header-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.header-img img {
+    width: 70px;
+    height: 70px;
+    object-fit: contain;
+
+    border-radius: 14px;
+    padding: 6px;
+    background: rgba(255,255,255,0.6);
+}
+
+/* HEADER CARD */
+.chart-header {
+    background: linear-gradient(135deg,#ede9fe,#ddd6fe);
+    border-radius: 22px;
+    padding: 22px 18px 18px; 
+
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    border: 1.5px solid rgba(124,58,237,0.18);
+    box-shadow: 0 8px 20px rgba(124,58,237,0.08);
+
+    margin-top: 12px;
+}
+
+/* TEXT */
+.header-text h1 {
+    margin: 0;
+    font-size: 20px;
+    font-weight: 800;
+    color: #111827;
+}
+
+.header-text p {
+    margin-top: 4px;
+    font-size: 12px;
+    color: #6b7280;
+}
+
+/* IMAGE */
+.header-image img {
+    width: 65px;
+    height: 65px;
+    object-fit: contain;
+
+    border-radius: 14px;
+    padding: 6px;
+    background: rgba(255,255,255,0.6);
+
+    box-shadow: 0 6px 14px rgba(0,0,0,0.06);
+}
+</style>
+
+
+<div class="px-4 pb-6 space-y-5">
+
+    <!-- HEADER -->
+    <div class="chart-header">
+
+        <div class="header-text">
+            <h1>Workout Charts 💪</h1>
+            <p>Track your progress over time</p>
+        </div>
+
+        <div class="header-image">
+            <img src="{% static 'images/workout_charts.png' %}" alt="Workout">
+        </div>
+
+    </div>
+
+    <!-- WEEK NAV -->
+    <div class="card flex justify-between items-center">
+        <p class="text-sm font-medium">
+            Week: {{ start_of_week }} → {{ end_of_week }}
+        </p>
+
+        <div class="flex gap-2 text-sm">
+            <a href="?week={{ week_offset|add:1 }}" class="pill">← Previous</a>
+            {% if week_offset > 0 %}
+                <a href="?week={{ week_offset|add:-1 }}" class="pill">Next →</a>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- CHART -->
+    <div class="card">
+
+        <div class="flex justify-between items-center mb-3">
+
+            <h3 class="font-semibold text-sm">Strength Progress</h3>
+
+            <!-- CUSTOM DROPDOWN -->
+            <div class="relative w-48">
+
+                <div id="dropdownBtn"
+                     class="bg-purple-50 px-4 py-2 rounded-xl text-sm flex justify-between items-center cursor-pointer shadow">
+
+                    <span id="selectedExercise">
+                        Select Exercise
+                    </span>
+
+                    <span>&#x2B07;</span>
+                </div>
+
+                <div id="dropdownMenu"
+                     class="absolute mt-2 w-full bg-white rounded-xl shadow-lg hidden z-50">
+
+                    {% for ex in exercise_data.keys %}
+                    <div class="dropdown-item px-4 py-2 text-sm cursor-pointer"
+                         data-value="{{ ex }}">
+                        {{ ex }}
+                    </div>
+                    {% endfor %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+        <canvas id="strengthChart"></canvas>
+
+    </div>
+
+    <!-- MUSCLE CHART -->
+    <div class="card">
+        <h3 class="font-semibold text-sm mb-2">Muscle Frequency</h3>
+        <canvas id="muscleChart"></canvas>
+    </div>
+
+    <!-- DATA -->
+    {{ exercise_data|json_script:"exercise-data" }}
+    {{ muscle_counts|json_script:"muscle-data" }}
+
+</div>
+
+
+<script>
+const allData = JSON.parse(document.getElementById('exercise-data').textContent);
+const muscleData = JSON.parse(document.getElementById('muscle-data').textContent);
+
+const ctx = document.getElementById('strengthChart');
+let chart;
+
+// gradient
+function getGradient(ctx) {
+    const gradient = ctx.createLinearGradient(0, 0, 0, 300);
+    gradient.addColorStop(0, 'rgba(124,58,237,0.4)');
+    gradient.addColorStop(1, 'rgba(124,58,237,0)');
+    return gradient;
+}
+
+// render chart
+function renderChart(exercise) {
+
+    const data = allData[exercise];
+    if (!data) return;
+
+    if (chart) chart.destroy();
+
+    chart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: data.map(d => d.date),
+            datasets: [{
+                label: exercise,
+                data: data.map(d => d.weight),
+                borderColor: '#7c3aed',
+                backgroundColor: getGradient(ctx.getContext('2d')),
+                fill: true,
+                tension: 0.4,
+                pointRadius: 4
+            }]
+        },
+        options: {
+            plugins: {
+                legend: { display: false }
+            }
+        }
+    });
+}
+
+
+// DEFAULT LOAD (safe)
+const firstExercise = Object.keys(allData)[0];
+if (firstExercise) {
+    document.getElementById('selectedExercise').innerText = firstExercise;
+    renderChart(firstExercise);
+}
+
+
+// MUSCLE CHART
+new Chart(document.getElementById('muscleChart'), {
+    type: 'bar',
+    data: {
+        labels: Object.keys(muscleData),
+        datasets: [{
+            data: Object.values(muscleData),
+            backgroundColor: '#7c3aed'
+        }]
+    },
+    options: {
+        plugins: { legend: { display: false } }
+    }
+});
+
+
+// DROPDOWN LOGIC
+const btn = document.getElementById('dropdownBtn');
+const menu = document.getElementById('dropdownMenu');
+const selectedText = document.getElementById('selectedExercise');
+
+btn.addEventListener('click', () => {
+    menu.classList.toggle('hidden');
+});
+
+document.querySelectorAll('.dropdown-item').forEach(item => {
+    item.addEventListener('click', () => {
+        const value = item.dataset.value;
+
+        selectedText.innerText = value;
+        menu.classList.add('hidden');
+
+        renderChart(value);
+    });
+});
+
+document.addEventListener('click', (e) => {
+    if (!btn.contains(e.target) && !menu.contains(e.target)) {
+        menu.classList.add('hidden');
+    }
+});
+</script>
+
+{% endblock %}

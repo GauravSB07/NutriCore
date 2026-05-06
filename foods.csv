@@ -1,0 +1,250 @@
+name,calories_per_100g,protein_per_100g,calories_per_unit,protein_per_unit,unit_type,serving_name,serving_quantity,categories,image
+White Rice Cooked,130,2.5,,,g,plate,200,High Carb;Veg,foods/white_cooked_rice_KcbRlHk.jpg
+Roti / Chapati,,,120,3,unit,,,High Carb;Veg,foods/roti.jpg
+Butter Roti,,,160,3,unit,,,High Carb;Veg;Junk,foods/Tandoori-Roti-500x500.webp
+Naan,,,260,6,unit,,,High Carb;Veg,foods/naan.jpg
+Butter Naan,,,300,7,unit,,,High Carb;Veg;Junk,foods/butter_naan.jpg
+Puri,,,150,2,unit,,,Street Food;Veg,foods/puri.jpg
+Pav,,,150,4,unit,,,Street Food;High Carb;Veg,foods/pav.jpg
+Egg,,,70,6,unit,,,High Protein;Egg,foods/eggsss.jpg
+Fried Egg,,,90,6,unit,,,Junk;High Protein;Egg,foods/imagefried_egg.jpg
+Cow Milk,65,3.3,,,ml,glass,250,Veg,foods/cow_milk.webp
+Curd,60,3.5,,,g,,,Veg,foods/curd.webp
+Paneer,265,18,,,g,,,Veg;Indian;High Protein,foods/paneer.jpg
+Roasted Panner,260,18,,,g,,,Veg,foods/roasted_paneer.jpg
+Rajma,140,9,,,g,bowl,150,Veg;Indian,foods/rajma.jpg
+Chole,160,8,,,g,bowl,150,Veg;Indian,foods/chole.jpg
+Daal Tadka,130,6,,,g,,,Veg,foods/daal_tadka.jpg
+Khichdi,110,4,,,g,,,Veg,foods/khichdi.jpg
+Veg Kolhapuri,150,4,,,g,,,Street Food;Veg,foods/Veg-Kolhapuri.webp
+Bhendi,90,2,,,g,,,Veg,foods/bhendi.jpg
+Panner Tikka,260,18,,,g,,,Veg,foods/Paneer-Tikka.jpg
+Butter Panner,300,10,,,g,,,Veg;Junk,foods/butter_paneer.jpg
+Panner Chilli,280,14,,,g,,,Veg,foods/paneer_chilli.jpg
+Panner Crispy,350,14,,,g,,,Veg,foods/paneer_crispy.jpg
+Paneer Paratha,,,250,8,unit,,,Veg;Indian;High Protein,foods/paneer_paratha.jpg
+Panner Shawarma,,,350,15,g,,,Veg,foods/paneer_shawarma.jpg
+Panner Biryani,180,6,,,g,plate,200,Veg;Indian,foods/paneer-biryani.jpg
+Masala Rice,160,4,,,g,plate,200,High Carb;Veg,foods/masala_rice.jpeg
+Veg Fried Rice,170,4,,,g,plate,200,High Carb;Veg;Junk,foods/veg_fried_rice.jpg
+Shezwan Fried Rice,190,4,,,g,plate,200,High Carb;Veg;Junk,foods/schezwan-fried-rice.jpg
+Veg Hyderabadi,170,5,,,g,,,Veg,foods/veg-hyderabadi-recipe.jpg
+Veg Noodles,140,4,,,g,bowl,200,High Carb;Veg;Chinese,foods/veg_noodles.jpg
+Shezwan Noodles,180,4,,,g,bowl,200,High Carb;Veg;Chinese,foods/schezwan_noodles.avif
+Maggie,,,350,8,unit,,,Veg,foods/maggie.jpg
+White Sauce Pasta,220,6,,,g,bowl,200,High Carb;Veg,foods/pasta_TEtDaHv.jpg
+Red Sauce Pasta,160,5,,,g,bowl,200,High Carb;Veg,foods/Red-Sauce-Pasta.webp
+Pink Sauce Pasta,200,6,,,g,bowl,200,High Carb;Veg,foods/pink_sauce_pasta.jpg
+Margherita,,,250,11,unit,,,Veg,foods/margherita_pizza.jpg
+Onion/Capsicum/Mushroom,,,260,10,unit,,,Veg,foods/capsicum_pizza.webp
+Peppy Paneer,,,300,11,unit,,,Veg;Indian;High Protein,foods/peppy_paneer_pizza.jpg
+Corn Pizza,,,270,9,unit,,,Fast Food;Veg;Junk,foods/corn_pizza.jpg
+Samosa,,,250,4,unit,,,Veg,foods/samosa.webp
+Pani Puri,,,180,4,unit,,,Street Food;Veg,foods/pani_puri.jpeg
+Misal Pav,,,350,12,unit,plate,250,Street Food;High Carb;Veg,foods/misal-pav.jpg
+Pav Bhaji,,,400,10,unit,,,Street Food;High Carb;Veg;Indian,foods/pav_bhaji.jpg
+French Fries,310,3,,,g,,,Fast Food;Veg;Junk,foods/fries.jpg
+Idli,,,60,2,unit,,,Veg;South Indian,foods/idli.jpg
+Dosa,,,150,3,unit,,,Veg;South Indian,foods/dosa.jpg
+Poha,130,3,,,g,plate,250,Veg,foods/poha.jpg
+Upma,120,3,,,g,plate,250,Veg;South Indian,foods/upma.webp
+Amboli,,,120,3,unit,,,Veg,foods/amboli.jpg
+Udid Papad,,,35,2,unit,,,Veg,foods/udid_papad.jpg
+Masala Papad,,,80,2,unit,,,Veg,foods/masala_papad.webp
+Aloo Pakora,300,5,,,g,,,Veg;Junk,foods/aloo_pakora.jpg
+Onion Pakora,280,6,,,g,,,Veg;Junk,foods/onion_pakora.webp
+Palak Pakora,250,5,,,g,,,Veg;Junk,foods/palak_pakora.jpg
+Veg Sandwich,,,230,5,unit,,,Fast Food;Veg,foods/non_grill_sandwich.jpg
+Grilled Veg Sandwich,,,280,6,unit,,,Fast Food;Veg;Healthy,foods/sandwich_mdasPQt.jpg
+Cheese Sandwich,,,300,9,unit,,,Fast Food;Veg,foods/cheese_sandwich.jpg
+Paneer Sandwich,,,320,14,unit,,,Fast Food;Veg,foods/paneer_sandwich.jpg
+Paneer Cheese Sandwich,,,420,17,unit,,,Fast Food;Veg,foods/paneer_cheese_sandwich.jpg
+Paneer Tikka Sandwich,,,370,17,g,,,Fast Food;Veg,foods/paneer_tikka_sandwich.webp
+Paneer Grilled Sandwich,,,370,15,unit,,,Healthy;Indian;Fast Food;Veg;High Protein,foods/paneer_ggrill_sandwich.jpg
+White Bread,,,70,2,unit,,,High Carb;Veg,foods/white_bread.jpg
+Brown Bread,,,60,3,unit,,,High Carb;Veg,foods/brown_bread.jpg
+Multigrain Bread,,,55,4,unit,,,High Carb;Veg,foods/multigrain_bread.jpg
+Cheese Cube,300,20,80,5,g,,,Veg,foods/cheese_cube.avif
+Cheese Slice,,,65,4,unit,,,Veg,foods/cheese_slice.webp
+Chicken Breast (Cooked),165,31,,,g,,,Non-Veg;High Protein,foods/chicken_breast.jpg
+Chicken Curry,200,18,,,g,bowl,150,Non-Veg;High Protein,foods/chicken_curry.jpg
+Tofu,145,15,,,g,,,Veg;High Protein,foods/tofu.jpg
+Soya Chunks(Cooked),120,16,,,g,,,Veg;High Protein,foods/soya_chunks.jpg
+Peanut Butter,,,95,4,unit,,,Veg;Junk,foods/peanut_butter.jpg
+Banana,,,105,1.5,unit,,,Veg,foods/banana.jpg
+Apple,,,95,0.5,unit,,,Veg,foods/apple.jpg
+Mango,,,150,1.7,unit,,,Veg,foods/mango.jpg
+Orange,,,62,1,unit,,,Veg,foods/orange.jpg
+Lassi,90,3,,,ml,glass,250,Beverages;Veg,foods/lassi.jpg
+Black Coffee,7,0.7,,,ml,cup,150,Low Calorie;Beverages;Veg,foods/black_coffee.webp
+Oats (basic),390,17,,,g,,,Veg,foods/oats.jpg
+Veg Burger,,,300,7,unit,,,Fast Food;Veg;Junk,foods/veg_burger.jpg
+Chicken Burger,,,400,18,unit,,,Fast Food;Junk;Non-Veg;High Protein,foods/chicken_burger.jpg
+Paneer Roll,,,350,12,unit,,,Veg;Indian;High Protein,foods/paneer_roll.jpg
+Jeera Rice,150,3,,,g,plate,200,High Carb;Veg,foods/jeera_rice.jpg
+Curd Rice,130,3,,,g,plate,200,High Carb;Veg,foods/curd_rice.webp
+Lemon Rice,180,4,,,g,plate,200,High Carb;Veg,foods/lemon_rice.jpg
+Gulab Jamun,,,150,2,unit,,,Veg,foods/gulab_jamun.jpg
+Rasgulla,,,120,3,unit,,,Veg,foods/Rasgulla.jpg
+Carrot,41,1,,,g,,,Veg,foods/carrot.jpg
+Brocolli,34,2.8,,,g,,,Veg,foods/brocli.jpg
+Cucumber,16,0.7,,,g,,,Veg,foods/cucumber.jpg
+Spinach,23,2.9,,,g,,,Veg,foods/spinach.webp
+Green Peas,80,4.4,,,g,,,Veg,foods/gran_pees.jpg
+Green Salad,40,2,,,g,,,Veg;Healthy,foods/green_salad.jpg
+Sprouts Salad,120,6,,,g,,,Veg;Healthy,foods/sprouts_salad.jpg
+Paneer Salad,200,11,,,g,,,Indian;Veg;Healthy;High Protein,foods/paneer_salad.jpg
+Tea,100,2,,,ml,cup,150,Veg,foods/tea.webp
+Cold Coffee,90,3,,,ml,cup,150,Beverages;Veg,foods/cold_coffee.jpg
+Sugarcane Juice,180,0,,,ml,glass,250,Beverages;Veg,foods/sugarcane_juice.jpg
+Popcorn (plain),380,12,,,g,,,Veg,foods/popcorn.jpg
+Nachos,500,7,,,g,,,Veg,foods/nachos.jpg
+Khakra,,,120,3,unit,,,Veg,foods/khakhra.webp
+Makhana (Roasted),350,9,,,g,,,Veg,foods/makhana.jpg
+Mirinda,35,0,,,ml,,,Veg,foods/mirinda_bottle.webp
+Sprite,45,0,,,ml,,,Veg,foods/sprite.jpg
+Coke,42,0,,,ml,,,Veg,foods/coca_cola.jpg
+Diet Coke,1,0,,,ml,,,Veg,foods/diet_coke_dam3nhq.jpg
+Mogu Mogu,47,0.2,,,ml,,,Veg,foods/mogu_mogu_wIhOK1w.png
+Frooti,65,0,,,ml,,,Veg,foods/frooti.webp
+Appy Fiz,55,0,,,ml,,,Veg,foods/appy_fizz.webp
+Amul Kool,90,3.1,,,ml,,,Veg,foods/amul_kool.jpg
+7 Up,30,0,,,ml,,,Veg,foods/7_up.jpg
+Sting,28,0,,,ml,,,Veg,foods/sting.jpg
+Maaza,63,0,,,ml,,,Veg,foods/maaza.jpg
+Parle - G Biscuit,,,23,0.3,unit,,,Veg,foods/parle_g.webp
+Marie Biscuit,,,24,0.5,unit,,,Veg,foods/marie_biscuit.jpg
+Oreo Biscuit,,,50,0.5,unit,,,Veg,foods/oreo.jpg
+Bourbon Biscuit,,,53,0.7,unit,,,Veg,foods/bornborn_biscuit.jpg
+Nutri Choice Digestive Biscuit,,,30,1,unit,,,Veg,foods/nutri_choice.jpg
+Jim-Jam Biscuit,,,55,0.6,unit,,,Veg,foods/jim_jam.jpg
+Happy Happy Biscuit,,,62,0.7,unit,,,Veg,foods/happy_happy.jpg
+Dairy Milk,,,12,0.2,unit,glass,250,Veg,foods/dairy_milk.jpg
+Five Star,,,45,0.5,unit,,,Veg,foods/5_star.jpg
+Ferrero Rocher,,,74,1,unit,,,Veg,foods/ferrero_rocher.avif
+Avacado Toast,250,6,,,g,,,Veg,foods/avacado_toast.webp
+Avacado Salad,160,2,,,g,,,Veg;Healthy,foods/avacado_salad.jpg
+Cheese Cake,320,6,,,g,,,Veg;Desserts,foods/cheese_cake.jpg
+Chocolate truffle cake,400,5,,,g,,,Veg;Desserts,foods/truffule_cake.jpg
+Double chocolate cake,370,6,,,g,,,Veg;Desserts,foods/double_chocolate_cake.jpg
+Dutch Chocolate Cake,350,5,,,g,,,Veg;Desserts,foods/dutch_cake.webp
+Choco chip Brownie,430,5,,,g,,,Veg,foods/chocochips_browonie.webp
+Walnut Brownie,450,6,,,g,,,Veg,foods/walnut_brownie.avif
+Chocolate Donut,,,300,4,unit,,,Veg;Desserts,foods/donut_brownie.jpg
+Strawberry Frosted Donut,,,280,4,unit,,,Veg,foods/strawberry_frosted_dounut.jpg
+Pizza Bun,180,6,,,g,,,Fast Food;Veg;Junk,foods/pizza_bun.webp
+Mini Pizza,200,8,,,g,,,Fast Food;Veg;Junk,foods/mini_image.jpg
+Veg Dry Manchurian,180,4,,,g,,,Veg;Chinese,foods/dry_manchurian.webp
+Veg Gravy Manchurian,150,4,,,g,,,Veg;Chinese,foods/gravy_manchurian.jpg
+Chicken Manchurian (Dry),220,25,,,g,,,Chinese;Non-Veg;High Protein,foods/dry_chicken_manchurian.jpg
+Chicken Manchurian (Gravy),220,14,,,g,,,Chinese;Non-Veg;High Protein,foods/gravy_chicken_manchurian.png
+Chicken Lollipop,,,100,8,unit,,,Non-Veg;High Protein,foods/chicken_lollipop.jpg
+Rasmalai Cake,320,6,,,g,,,Veg;Desserts,foods/rasmalai_cake.jpg
+Chocolate Fudge,480,4,,,g,,,Veg;Desserts,foods/choclate_fudge.jpg
+Walnut Fudge,450,5,,,g,,,Veg,foods/walnut_fudge.jpg
+Vada Pav,,,300,8,unit,,,Street Food;High Carb;Veg,foods/vada_pav.avif
+Vada Usal,,,350,12,unit,,,Veg,foods/vada_usal.jpg
+Egg Omelette,,,70,6,g,,,High Protein;Egg,foods/egg_omlet.webp
+Tomato Ketchup,110,1,,,g,,,Veg,foods/tomato_ketchup.jpeg
+Schezwan Chutney,120,2,,,g,,,Veg;Chinese,foods/Shezwan_Chutney.png
+Soy Sauce,50,8,,,ml,,,Veg,foods/soy_sauce.avif
+Red Chilli Sauce,80,1,,,g,,,Veg,foods/red_chilli_sauce.avif
+Green Chilli Sauce,60,1,,,g,,,Veg,
+Grilled Chicken Breast,165,31,,,g,,,Non-Veg;High Protein;Healthy,
+Boiled Egg White,,,17,4,piece,egg white,1,Egg;High Protein;Low Calorie,
+Boiled Egg,,,70,6,piece,egg,1,Egg;High Protein,
+Paneer Bhurji,265,18,,,g,,,Veg;High Protein;Indian,
+Tofu Stir Fry,150,15,,,g,,,Veg;High Protein;Healthy,
+Soya Chunk Curry,120,16,,,g,,,Veg;High Protein;Indian,
+Roasted Chana,360,20,,,g,,,Snacks;High Protein;Healthy,
+Boiled Corn,96,3.4,,,g,,,Veg;Healthy,
+Butter Corn,150,3.5,,,g,,,Snacks;Junk,
+Oats Porridge,70,2.5,,,g,bowl,1,Healthy;Breakfast;Low Calorie,
+Masala Omelette,,,180,12,piece,2 eggs,1,Egg;High Protein;Indian,
+Bread Butter,250,6,,,g,2 slices,1,Fast Food;Junk;High Carb,
+Chicken Shawarma,,,400,20,piece,roll,1,Non-Veg;Street Food;Fast Food,
+Veg Frankie,,,250,6,piece,roll,1,Street Food;Veg,
+Paneer Frankie,,,350,12,piece,roll,1,Street Food;Veg;High Protein,
+Chicken Biryani,220,15,,,g,,,Non-Veg;Indian;High Carb,
+Egg Fried Rice,180,6,,,g,,,Egg;Chinese;High Carb,
+Chicken Fried Rice,200,10,,,g,,,Non-Veg;Chinese;High Carb,
+Hakka Noodles,150,5,,,g,,,Chinese;Fast Food;High Carb,
+Chicken Noodles,180,10,,,g,,,Chinese;Non-Veg;High Carb,
+Vegetable Soup,40,2,,,ml,bowl,1,Healthy;Low Calorie,
+Chicken Soup,80,6,,,ml,bowl,1,Non-Veg;High Protein;Healthy,
+Banana Shake,120,3,,,ml,glass,1,Beverages;High Carb,
+Chocolate Milkshake,150,4,,,ml,glass,1,Beverages;Junk
+Fish Fry Kerala,230,20,,,g,,,Non-Veg;Indian;Junk,
+Prawn Curry,180,20,,,g,,,Non-Veg;Indian;High Protein,
+Chicken Keema,250,22,,,g,,,Non-Veg;High Protein,
+Mutton Keema,280,20,,,g,,,Non-Veg;High Protein,
+Boiled Chicken Salad,150,25,,,g,,,Non-Veg;Healthy;High Protein,
+Grilled Chicken Sandwich,,,320,20,piece,,,Non-Veg;High Protein;Fast Food,
+Chicken Caesar Salad,180,15,,,g,,,Non-Veg;Healthy,
+Paneer Tikka Roll,,,360,14,piece,,,Veg;Indian;High Protein,
+Paneer Bhurji Sandwich,,,340,15,piece,,,Veg;High Protein,
+Veg Cheese Burger,,,420,12,piece,,,Fast Food;Veg;Junk,
+Double Chicken Burger,,,550,30,piece,,,Fast Food;Non-Veg;High Protein,
+Cheese Garlic Bread,,,300,8,piece,,,Fast Food;Veg;Junk,
+Garlic Bread,,,250,6,piece,,,Fast Food;Veg,
+Veg Lasagna,200,8,,,g,,,Fast Food;Veg,
+Chicken Lasagna,250,15,,,g,,,Fast Food;Non-Veg,
+Veg Sushi,,,200,6,piece,,,Healthy;Veg,
+Chicken Sushi,,,250,12,piece,,,Healthy;Non-Veg,
+Veg Burrito,,,300,8,piece,,,Fast Food;Veg,
+Chicken Burrito,,,380,18,piece,,,Fast Food;Non-Veg;High Protein,
+Paneer Burrito,,,350,14,piece,,,Fast Food;Veg;High Protein,
+Veg Quesadilla,,,280,7,piece,,,Fast Food;Veg,
+Chicken Quesadilla,,,350,15,piece,,,Fast Food;Non-Veg,
+Falooda,,,300,5,glass,,,Desserts;Veg,
+Kheer,150,4,,,g,,,Desserts;Veg
+Chicken Stew,180,20,,,g,,,Non-Veg;Indian;Healthy,
+Mutton Stew,220,18,,,g,,,Non-Veg;Indian,
+Fish Stew,160,20,,,g,,,Non-Veg;Indian;Healthy,
+Egg Drop Soup,70,6,,,ml,,,Egg;Healthy,
+Chicken Clear Soup,60,8,,,ml,,,Non-Veg;Healthy,
+Veg Clear Soup,40,2,,,ml,,,Veg;Healthy,
+Tom Yum Soup,90,6,,,ml,,,Non-Veg;Healthy,
+Hot Chocolate,180,5,,,ml,,,Beverages;Desserts,
+Chocolate Shake Thick,200,6,,,ml,,,Beverages;Junk,
+Strawberry Smoothie,120,3,,,ml,,,Beverages;Healthy,
+Mango Smoothie,140,3,,,ml,,,Beverages;Healthy,
+Banana Smoothie,130,4,,,ml,,,Beverages;Healthy,
+Cold Cocoa,160,4,,,ml,,,Beverages;Junk,
+Iced Latte,90,4,,,ml,,,Beverages,
+Mocha Coffee,120,5,,,ml,,,Beverages,
+Veg Momos Tandoori,,,380,10,piece,,,Veg;Junk,
+Chicken Momos Tandoori,,,420,18,piece,,,Non-Veg;Junk;High Protein,
+Paneer Momos Kurkure,,,480,14,piece,,,Veg;Junk;High Protein,
+Chicken Momos Kurkure,,,520,20,piece,,,Non-Veg;Junk;High Protein,
+Veg Manchow Soup,80,3,,,ml,,,Chinese;Veg,
+Chicken Manchow Soup,120,8,,,ml,,,Chinese;Non-Veg,
+Veg Schezwan Noodles,190,5,,,g,,,Chinese;Veg,
+Chicken Schezwan Noodles,230,12,,,g,,,Chinese;Non-Veg,
+Egg Schezwan Noodles,210,9,,,g,,,Chinese;Egg,
+Veg Triple Rice,220,6,,,g,,,Chinese;Veg,
+Chicken Triple Rice,260,12,,,g,,,Chinese;Non-Veg,
+Paneer Butter Kulcha,,,320,10,piece,,,Indian;Veg;Junk,
+Amritsari Kulcha,,,300,9,piece,,,Indian;Veg,
+Aloo Kulcha,,,280,7,piece,,,Indian;Veg,
+Chicken Kulcha,,,350,15,piece,,,Indian;Non-Veg,
+Paneer Kulcha,,,320,12,piece,,,Indian;Veg;High Protein,
+Veg Fried Momos Schezwan,,,400,8,piece,,,Veg;Junk,
+Chicken Fried Momos Schezwan,,,450,18,piece,,,Non-Veg;Junk,
+Paneer Fried Momos Schezwan,,,470,14,piece,,,Veg;Junk;High Protein,
+Veg Maggi Masala,,,360,9,unit,,,Veg,
+Cheese Maggi,,,420,12,unit,,,Veg;Junk,
+Chicken Maggi,,,450,15,unit,,,Non-Veg,
+Egg Maggi,,,400,12,unit,,,Egg,
+Butter Toast,,,180,4,piece,,,Breakfast;Veg,
+Jam Toast,,,160,3,piece,,,Breakfast;Veg,
+French Fries Peri Peri,330,4,,,g,,,Fast Food;Junk,
+Loaded Nachos Cheese,520,8,,,g,,,Snacks;Junk,
+Paneer Nuggets,,,350,14,piece,,,Veg;High Protein,
+Chicken Nuggets Fried,,,380,18,piece,,,Non-Veg;Junk,
+Veg Nuggets,,,280,8,piece,,,Veg,
+Paneer Fingers,,,320,12,piece,,,Veg;High Protein,
+Chicken Fingers,,,400,20,piece,,,Non-Veg;Junk,
+Veg Club Sandwich,,,300,8,piece,,,Fast Food;Veg,
+Chicken Club Sandwich,,,380,18,piece,,,Fast Food;Non-Veg;High Protein,
+Paneer Club Sandwich,,,350,15,piece,,,Fast Food;Veg;High Protein

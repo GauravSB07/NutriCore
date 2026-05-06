@@ -1,0 +1,228 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 16px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.05);
+}
+
+.title {
+    text-align: center;
+    font-size: 20px;
+    font-weight: 700;
+    color: #4c1d95;
+}
+
+.summary {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.progress {
+    height: 8px;
+    background: #ddd6fe;
+    border-radius: 10px;
+    margin-top: 8px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: {{ progress|default:0 }}%;
+    background: linear-gradient(to right,#7c3aed,#a78bfa);
+}
+
+.streak {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 5px solid #7c3aed;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    font-weight: 600;
+    color: #4c1d95;
+}
+
+.small {
+    font-size: 12px;
+    color: #6b7280;
+}
+
+.highlight {
+    font-weight: 700;
+    color: #7c3aed;
+}
+
+/* 🔥 CONTAINER FOR WEEK CARDS */
+.week-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* 🔥 INDIVIDUAL CARDS */
+.week-card {
+    flex: 1 1 calc(50% - 12px);
+    max-width: calc(50% - 12px);
+
+    background: white;
+    border-radius: 16px;
+    padding: 14px;
+    font-size: 13px;
+    box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+
+    transition: 0.2s;
+}
+
+.week-card:hover {
+    transform: translateY(-2px);
+}
+</style>
+
+
+<div class="px-4 space-y-5 flex flex-col min-h-full">
+
+    <!-- TITLE -->
+    <div class="title">Monthly Report &#x1F680;</div>
+
+    <!-- SUMMARY -->
+    <div class="card">
+        <div class="summary">
+
+            <div>
+                <strong>Monthly Summary</strong><br>
+                <span class="small">Keep it up! You're doing great.</span>
+
+                <div class="progress">
+                    <div class="progress-bar"></div>
+                </div>
+                <span class="small">{{ progress|default:0 }}%</span>
+
+                <br><br>
+
+                <div class="small">
+                    Consistency:
+                    <span class="highlight">{{ consistency_days|default:0 }}</span> days
+                </div>
+
+                <div class="small mt-1">
+                    Cheat Days:
+                    <span class="highlight">{{ cheat_days|default:0 }}</span>
+                </div>
+            </div>
+
+            <div class="streak">
+                🔥
+                <div>{{ streak|default:0 }}</div>
+                <small>Days</small>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- WEEKLY CARDS -->
+    <div class="week-container">
+        {% for w in weekly_summary %}
+        <div class="week-card">
+            <strong>{{ w.week }}</strong><br>
+
+            Calories: {{ w.avg_calories|default:0 }} kcal<br>
+            Protein: {{ w.avg_protein|default:0 }} g<br>
+
+            Cheat:
+            {% if w.cheat_days > 2 %}
+                <span class="text-red-500 font-semibold">{{ w.cheat_days }} ⚠️</span>
+            {% else %}
+                <span class="text-green-500 font-semibold">{{ w.cheat_days }} ✅</span>
+            {% endif %}
+            <br>
+
+            Fat Loss:
+            {% if w.fat_loss_days >= 5 %}
+                <span class="text-purple-600 font-bold">{{ w.fat_loss_days }} 🔥</span>
+            {% else %}
+                <span class="text-red-500 font-semibold">{{ w.fat_loss_days }}</span>
+            {% endif %}
+        </div>
+        {% empty %}
+        <div class="week-card">No weekly data</div>
+        {% endfor %}
+    </div>
+
+    <!-- CHART -->
+    <div class="card">
+        <strong class="text-purple-900">Monthly Intake</strong>
+
+        <!-- FIXED HEIGHT CONTAINER -->
+        <div style="height:220px;">
+            <canvas id="chart"></canvas>
+        </div>
+    </div>
+
+    <div class="mt-auto h-20"></div>
+</div>
+
+
+<!-- DATA -->
+{{ labels|json_script:"labels-data" }}
+{{ calories|json_script:"calories-data" }}
+{{ protein|json_script:"protein-data" }}
+
+<script>
+const labels = JSON.parse(document.getElementById('labels-data').textContent || "[]");
+const calories = JSON.parse(document.getElementById('calories-data').textContent || "[]");
+const protein = JSON.parse(document.getElementById('protein-data').textContent || "[]");
+
+const target = {{ target_calories|default:0 }};
+
+new Chart(document.getElementById('chart'), {
+    type: 'bar', // ✅ IMPORTANT FIX
+
+    data: {
+        labels: labels,
+        datasets: [
+            {
+                label: 'Calories',
+                data: calories,
+                backgroundColor: '#f59e0b'
+            },
+            {
+                label: 'Protein',
+                data: protein,
+                backgroundColor: '#8b5cf6'
+            },
+            {
+                type: 'line',
+                label: 'Target',
+                data: labels.map(() => target),
+                borderColor: '#7c3aed',
+                borderDash: [5,5],
+                pointRadius: 0
+            }
+        ]
+    },
+
+    options: {
+        responsive: true,               // ✅ FIX
+        maintainAspectRatio: false,     // ✅ FIX
+
+        plugins: {
+            legend: {
+                labels: { color: '#4c1d95' }
+            }
+        }
+    }
+});
+</script>
+
+{% endblock %}

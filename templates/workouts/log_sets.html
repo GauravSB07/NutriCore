@@ -1,0 +1,181 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(135deg,#e9d5ff,#c084fc);
+}
+
+.container {
+    max-width: 420px;
+    margin: auto;
+    background: #f8fafc;
+    border-radius: 30px;
+    padding: 18px;
+    min-height: 100vh;
+}
+
+/* HEADER */
+.header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.back {
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+    background: #ede9fe;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+}
+
+.title {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+/* CARD */
+.card {
+    background: white;
+    border-radius: 20px;
+    padding: 16px;
+    margin-top: 20px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+}
+
+/* INPUT GROUP */
+.input-group {
+    margin-bottom: 14px;
+}
+
+.input-group label {
+    font-size: 13px;
+    color: #374151;
+}
+
+/* INPUT BOX */
+.input-box {
+    margin-top: 6px;
+    background: #f3f4f6;
+    border-radius: 12px;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+}
+
+.input-box input,
+.input-box select {
+    border: none;
+    outline: none;
+    background: transparent;
+    width: 100%;
+    font-size: 14px;
+}
+
+/* BUTTON */
+.add-btn {
+    width: 100%;
+    background: #d8b4fe;
+    border: none;
+    padding: 12px;
+    border-radius: 12px;
+    font-weight: 600;
+    color: #4c1d95;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+/* LOGGED SETS */
+.section-title {
+    margin-top: 20px;
+    font-weight: 600;
+}
+
+/* EMPTY BOX */
+.empty-box {
+    margin-top: 10px;
+    background: white;
+    border-radius: 16px;
+    padding: 20px;
+    text-align: center;
+    color: #6b7280;
+}
+</style>
+
+<div class="container">
+
+    <!-- HEADER -->
+    <div class="header">
+        <div class="back">←</div>
+        <div class="title">Log Workout - {{ session.sub_muscle.name }}</div>
+    </div>
+
+    <!-- FORM CARD -->
+    <div class="card">
+        <form method="post">
+            {% csrf_token %}
+
+            <!-- REPS -->
+            <div class="input-group">
+                <label>Reps</label>
+                <div class="input-box">
+                    🔁
+                    <input type="number" name="reps" placeholder="Enter reps" required>
+                </div>
+            </div>
+
+            <!-- WEIGHT -->
+            <div class="input-group">
+                <label>Weight (kg)</label>
+                <div class="input-box">
+                    🏋️
+                    <input type="number" step="0.5" name="weight" placeholder="Enter weight" required>
+                </div>
+            </div>
+
+            <button type="submit" class="add-btn">+ Add Set</button>
+
+        </form>
+    </div>
+
+    <!-- LOGGED SETS -->
+    <div class="section-title">Logged Sets</div>
+
+    {% if sets %}
+    <div class="card">
+
+        {% for s in sets %}
+        <div style="padding:10px 0; border-bottom:1px solid #eee;">
+            
+            <!-- Exercise Name -->
+            <div style="font-weight:600; font-size:14px;">
+                {{ s.exercise.name }}
+            </div>
+
+            <!-- Details -->
+            <div style="font-size:12px; color:#6b7280; margin-top:2px;">
+                🔁 {{ s.reps }} reps • 🏋️ {{ s.weight }} kg
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+    {% else %}
+        <div class="empty-box">
+            📋
+            <p>No sets yet</p>
+        </div>
+    {% endif %}
+
+</div>
+
+{% endblock %}

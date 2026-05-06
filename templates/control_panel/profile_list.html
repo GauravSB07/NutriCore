@@ -1,0 +1,191 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+
+/* 🔥 REMOVE NAVBAR */
+nav,
+.navbar,
+.bottom-nav,
+.top-nav,
+header {
+    display: none !important;
+}
+
+body {
+    margin: 0 !important;
+    padding: 0 !important;
+    background: linear-gradient(135deg,#e9d5ff,#c084fc);
+    font-family: 'Poppins', sans-serif;
+}
+
+/* WRAPPER */
+.wrapper {
+    max-width: 420px;
+    margin: auto;
+    padding: 16px;
+}
+
+/* HEADER */
+.header {
+    font-size: 24px;
+    font-weight: 800;
+    margin-bottom: 6px;
+}
+
+.sub-header {
+    font-size: 13px;
+    color: #6b7280;
+    margin-bottom: 12px;
+}
+
+/* TOP BAR */
+.top-bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+/* ADD BUTTON */
+.add-btn {
+    padding: 10px 14px;
+    border-radius: 12px;
+    background: linear-gradient(to right,#7c3aed,#a78bfa);
+    color: white;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* CARD */
+.card {
+    background: rgba(255,255,255,0.75);
+    backdrop-filter: blur(18px);
+    border-radius: 22px;
+    padding: 14px;
+
+    border: 1px solid rgba(124,58,237,0.15);
+    box-shadow: 0 10px 25px rgba(124,58,237,0.12);
+}
+
+/* PROFILE ITEM */
+.profile-item {
+    padding: 12px;
+    border-radius: 14px;
+    margin-bottom: 10px;
+
+    background: rgba(255,255,255,0.6);
+    border: 1px solid rgba(124,58,237,0.1);
+
+    transition: 0.2s;
+}
+
+.profile-item:hover {
+    background: #ede9fe;
+    transform: translateY(-2px);
+}
+
+/* NAME */
+.username {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+/* EXTRA INFO */
+.info {
+    font-size: 12px;
+    color: #6b7280;
+    margin-top: 2px;
+}
+
+/* ACTIONS */
+.actions {
+    display: flex;
+    gap: 12px;
+    margin-top: 8px;
+    font-size: 12px;
+}
+
+.actions a {
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.edit {
+    color: #7c3aed;
+}
+
+.delete {
+    color: #dc2626;
+}
+
+.back {
+    display: block;
+    margin-top: 14px;
+    text-align: center;
+    font-size: 13px;
+    color: #6b7280;
+    text-decoration: none;
+}
+
+</style>
+
+
+<div class="wrapper">
+
+    <!-- HEADER -->
+    <div class="header">Profiles 🪪</div>
+    <div class="sub-header">
+        Total Profiles: {{ profiles|length }}
+    </div>
+
+    <!-- ADD BUTTON -->
+    <div class="top-bar">
+        <a href="{% url 'add_profile' %}" class="add-btn">
+            + Add Profile
+        </a>
+    </div>
+
+    <!-- LIST -->
+    <div class="card">
+
+        {% for p in profiles %}
+
+        <div class="profile-item">
+
+            <div class="username">
+                {{ p.user.username }}
+            </div>
+
+            <!-- OPTIONAL EXTRA -->
+            {% if p.daily_calorie_target %}
+                <div class="info">
+                    Target: {{ p.daily_calorie_target }} kcal
+                </div>
+            {% endif %}
+
+            <div class="actions">
+                <a href="{% url 'edit_profile' p.id %}" class="edit">Edit</a>
+                <a href="{% url 'delete_profile' p.id %}"
+                   class="delete"
+                   onclick="return confirm('Delete profile?')">
+                   Delete
+                </a>
+            </div>
+
+        </div>
+
+        {% empty %}
+        <p style="color:#6b7280;">No profiles found</p>
+        {% endfor %}
+
+    </div>
+
+    <a href="{% url 'admin_dashboard' %}" class="back">
+        ← Back
+    </a>
+
+</div>
+
+{% endblock %}

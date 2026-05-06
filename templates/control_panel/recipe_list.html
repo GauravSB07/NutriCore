@@ -1,0 +1,362 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<style>
+
+/* REMOVE NAV */
+nav, .navbar, .bottom-nav, .top-nav, header {
+    display: none !important;
+}
+
+body{
+    margin:0;
+    background:linear-gradient(135deg,#e9d5ff,#c084fc);
+    font-family:'Poppins',sans-serif;
+}
+
+/* WRAPPER */
+.wrapper{
+    max-width:420px;
+    margin:auto;
+    padding:16px;
+}
+
+/* HEADER */
+.header{
+    font-size:24px;
+    font-weight:800;
+}
+
+.sub-header{
+    font-size:13px;
+    color:#6b7280;
+    margin-bottom:14px;
+}
+
+/* TOP */
+.top-bar{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:14px;
+}
+
+/* ADD BTN */
+.add-btn{
+    padding:10px 14px;
+    border-radius:12px;
+    background:linear-gradient(to right,#7c3aed,#a78bfa);
+    color:white;
+    text-decoration:none;
+    font-size:13px;
+    font-weight:600;
+}
+
+/* SEARCH */
+.search-wrap{
+    position:relative;
+    margin-bottom:14px;
+}
+
+.search{
+    width:100%;
+    padding:11px 12px 11px 42px;
+    border-radius:14px;
+    border:1px solid rgba(124,58,237,0.2);
+    background:rgba(255,255,255,0.7);
+    outline:none;
+    font-size:13px;
+    backdrop-filter:blur(10px);
+}
+
+.search:focus{
+    border-color:#7c3aed;
+    box-shadow:0 0 0 3px rgba(124,58,237,0.12);
+}
+
+.search-icon{
+    position:absolute;
+    left:14px;
+    top:50%;
+    transform:translateY(-50%);
+    color:#7c3aed;
+    font-size:14px;
+}
+
+/* CARD */
+.card{
+    background:rgba(255,255,255,0.82);
+    backdrop-filter:blur(18px);
+    border-radius:22px;
+    padding:12px;
+    transition:0.2s;
+}
+
+/* RECIPE ITEM */
+.recipe-item{
+    padding:12px;
+    border-radius:16px;
+    margin-bottom:12px;
+
+    background:rgba(255,255,255,0.72);
+    border:1px solid rgba(124,58,237,0.1);
+
+    transition:0.2s;
+}
+
+.recipe-item:hover{
+    background:#ede9fe;
+    transform:translateY(-2px);
+}
+
+/* TOP */
+.recipe-top{
+    display:flex;
+    gap:12px;
+}
+
+/* IMAGE */
+.recipe-img{
+    width:72px;
+    height:72px;
+    border-radius:14px;
+    object-fit:cover;
+    background:#f3f4f6;
+}
+
+/* INFO */
+.recipe-info{
+    flex:1;
+}
+
+.recipe-name{
+    font-size:16px;
+    font-weight:700;
+    color:#111827;
+}
+
+.recipe-category{
+    font-size:12px;
+    color:#7c3aed;
+    margin-top:2px;
+}
+
+/* STATS */
+.stats{
+    display:flex;
+    gap:8px;
+    flex-wrap:wrap;
+    margin-top:8px;
+}
+
+.stat{
+    background:#f3f4f6;
+    padding:5px 10px;
+    border-radius:10px;
+    font-size:11px;
+}
+
+/* ACTIONS */
+.actions{
+    display:flex;
+    gap:12px;
+    margin-top:10px;
+    font-size:12px;
+}
+
+.edit{
+    color:#7c3aed;
+    text-decoration:none;
+    font-weight:600;
+}
+
+.delete{
+    color:#dc2626;
+    text-decoration:none;
+    font-weight:600;
+}
+
+/* BACK */
+.back-btn{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+
+    padding:6px 10px;
+    margin-bottom:12px;
+
+    border-radius:10px;
+
+    background:rgba(255,255,255,0.6);
+    border:1px solid rgba(124,58,237,0.2);
+
+    font-size:12px;
+    font-weight:600;
+    color:#6b7280;
+    text-decoration:none;
+}
+
+.back-btn:hover{
+    background:#ede9fe;
+    color:#7c3aed;
+}
+
+/* EMPTY */
+.empty{
+    color:#6b7280;
+    text-align:center;
+    padding:14px;
+    font-size:13px;
+}
+
+</style>
+
+
+<div class="wrapper">
+
+    <!-- HEADER -->
+    <div class="header">Recipes 📖
+        &emsp;&emsp;&emsp;&emsp;
+        <a href="{% url 'admin_dashboard' %}" class="back-btn">
+        ← Dashboard
+        </a>
+    </div>
+
+    <div class="sub-header" id="recipeCount">
+        Total Recipes: {{ recipes|length }}
+    </div>
+
+    <!-- TOP -->
+    <div class="top-bar">
+        <a href="{% url 'add_recipe' %}" class="add-btn">
+            + Add Recipe
+        </a>
+    </div>
+
+    <!-- SEARCH -->
+    <div class="search-wrap">
+
+        <span class="search-icon">🔍</span>
+
+        <input type="text"
+               class="search"
+               id="searchInput"
+               placeholder="Search recipes...">
+
+    </div>
+
+    <!-- LIST -->
+    <div class="card" id="recipeContainer">
+
+        {% for r in recipes %}
+
+        <div class="recipe-item">
+
+            <div class="recipe-top">
+
+                <!-- IMAGE -->
+                <img src="{% if r.image %}{{ r.image.url }}{% else %}{% static 'images/food_placeholder.png' %}{% endif %}"
+                     class="recipe-img">
+
+                <!-- INFO -->
+                <div class="recipe-info">
+
+                    <div class="recipe-name">
+                        {{ r.name }}
+                    </div>
+
+                    <div class="recipe-category">
+                        {{ r.category }}
+                    </div>
+
+                    <!-- STATS -->
+                    <div class="stats">
+
+                        <div class="stat">
+                            🔥 {{ r.calories|default:"—" }} kcal
+                        </div>
+
+                        <div class="stat">
+                            💪 {{ r.protein|default:"—" }}g
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <!-- ACTIONS -->
+            <div class="actions">
+
+                <a href="{% url 'edit_recipe' r.id %}" class="edit">
+                    Edit
+                </a>
+
+                <a href="{% url 'delete_recipe' r.id %}"
+                   class="delete"
+                   onclick="return confirm('Delete this recipe?')">
+
+                    Delete
+
+                </a>
+
+            </div>
+
+        </div>
+
+        {% empty %}
+
+        <div class="empty">
+            No recipes found 📖
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+
+<script>
+
+const searchInput = document.getElementById('searchInput');
+const recipeContainer = document.getElementById('recipeContainer');
+const recipeCount = document.getElementById('recipeCount');
+
+let timeout = null;
+
+searchInput.addEventListener('input', function() {
+
+    clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+
+        recipeContainer.style.opacity = "0.5";
+
+        fetch(`?q=${this.value}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+
+        .then(res => res.json())
+
+        .then(data => {
+
+            recipeContainer.innerHTML = data.html;
+
+            recipeCount.innerHTML = `Total Recipes: ${data.count}`;
+
+            recipeContainer.style.opacity = "1";
+
+        });
+
+    }, 300);
+
+});
+
+</script>
+
+{% endblock %}
