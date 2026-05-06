@@ -1,9 +1,20 @@
 #!/usr/bin/env bash
+set -o errexit
+set -x
 
+echo "Installing requirements..."
 pip install -r requirements.txt
 
-python manage.py migrate
+echo "Running migrations..."
+python manage.py migrate --verbosity 3
 
-python manage.py loaddata data.json
+echo "Checking files..."
+ls -la
 
+echo "Loading data..."
+python manage.py loaddata data.json --verbosity 3
+
+echo "Collecting static..."
 python manage.py collectstatic --noinput
+
+echo "BUILD FINISHED"
