@@ -140,18 +140,32 @@
 
 
     <!-- ✏️ CUSTOM INPUT -->
-    <div class="bg-blue-50/60 backdrop-blur rounded-2xl p-4 shadow-sm space-y-3 border border-blue-100">
+    <div class="bg-[#f3edff] border border-[#e5d9ff] rounded-3xl p-4 shadow-sm space-y-3">
 
-        <h3 class="text-sm font-semibold text-blue-800">Add Custom Amount</h3>
+        <div class="flex items-center justify-between">
+            <h3 class="text-sm font-semibold text-[#5b21b6]">
+                Add Custom Water
+            </h3>
+
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-purple-500 
+                        flex items-center justify-center text-white text-sm shadow">
+                💧
+            </div>
+        </div>
 
         <form method="post" class="flex gap-2">
             {% csrf_token %}
 
-            <input type="number" name="amount"
-                placeholder="Enter ml (e.g. 300)"
-                class="flex-1 px-3 py-2 rounded-xl bg-white border border-blue-200 focus:ring-2 focus:ring-blue-400">
+            <input type="number"
+                name="amount"
+                placeholder="Enter ml"
+                class="flex-1 px-4 py-3 rounded-2xl bg-white border border-[#ddd6fe]
+                        focus:outline-none focus:ring-2 focus:ring-violet-400
+                        text-sm shadow-sm">
 
-            <button class="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-4 rounded-xl shadow">
+            <button class="bg-gradient-to-r from-violet-500 to-purple-500
+                        text-white px-5 rounded-2xl shadow-md
+                        font-medium text-sm active:scale-95 transition">
                 Add
             </button>
         </form>
