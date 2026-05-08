@@ -146,26 +146,23 @@
             <h3 class="text-sm font-semibold text-[#5b21b6]">
                 Add Custom Water
             </h3>
-
-            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-violet-500 to-purple-500 
-                        flex items-center justify-center text-white text-sm shadow">
-                💧
-            </div>
         </div>
 
-        <form method="post" class="flex gap-2">
+        <form method="post" class="flex items-center gap-2">
             {% csrf_token %}
 
             <input type="number"
                 name="amount"
                 placeholder="Enter ml"
-                class="flex-1 px-4 py-3 rounded-2xl bg-white border border-[#ddd6fe]
+                class="flex-1 min-w-0 px-4 py-3 rounded-2xl
+                        bg-white border border-[#ddd6fe]
                         focus:outline-none focus:ring-2 focus:ring-violet-400
                         text-sm shadow-sm">
 
             <button class="bg-gradient-to-r from-violet-500 to-purple-500
-                        text-white px-5 rounded-2xl shadow-md
-                        font-medium text-sm active:scale-95 transition">
+                        text-white px-4 py-3 rounded-2xl
+                        shadow-md font-medium text-sm
+                        active:scale-95 transition whitespace-nowrap">
                 Add
             </button>
         </form>
