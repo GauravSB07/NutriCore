@@ -2868,7 +2868,7 @@
     "serving_name": "egg white",
     "serving_quantity": 1.0,
     "image": "foods/white_egg_wFicDfZ.jpg",
-    "created_by": 1,
+    "created_by": null,
     "categories": [
       3,
       4,
@@ -2889,7 +2889,7 @@
     "serving_name": "egg",
     "serving_quantity": 1.0,
     "image": "foods/237562-pressure-cooker-hard-boiled-eggs-DDMFS-Beauty-4x3-0fcf127e464040aa943957a13bcfa339.jpg",
-    "created_by": 1,
+    "created_by": null,
     "categories": [
       3,
       4

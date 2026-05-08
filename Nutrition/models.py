@@ -33,7 +33,7 @@ class Food(models.Model):
 
     categories = models.ManyToManyField(Category, related_name='foods', blank=True)
 
-    created_by = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
 
     def __str__(self):
         return self.name
